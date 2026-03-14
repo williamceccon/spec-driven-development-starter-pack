@@ -24,3 +24,7 @@ PY
 git init "$TARGET_REPO" >/dev/null
 python3 "$REPO_ROOT/skills/specify-workflow-pack/scripts/install_workflow_pack.py" --repo "$TARGET_REPO" --config "$TARGET_REPO/workflow-pack.json"
 echo "Project created at $TARGET_REPO"
+echo "Next steps:"
+echo "  1. Review workflow-pack.json and install runtime dependencies."
+echo "  2. Run /brief \"initial feature idea\" inside the new repo."
+echo "  3. Run /workflow <slug> using the slug written to BRIEF.md."

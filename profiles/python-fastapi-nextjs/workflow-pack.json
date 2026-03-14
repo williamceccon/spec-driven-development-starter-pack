@@ -29,6 +29,7 @@
   "repository_map": [
     "`src/` -> application code",
     "`tests/` -> test suite",
+    "`skills/` -> repo-local fallback skills for `/brief` and `/workflow`",
     "`.specify/` -> Specify templates and constitution",
     "`.opencode/` -> OpenCode command surface",
     "`.codex/` -> Codex prompt surface"
@@ -42,5 +43,12 @@
     "poetry run mypy src/"
   ],
   "frontend_validation": "cd web && npm run test",
-  "constitution_version": "1.0.0"
+  "required_skills": [
+    "brainstorming",
+    "gh-fix-ci",
+    "gh-address-comments"
+  ],
+  "brief_artifact": "BRIEF.md",
+  "local_skills_dir": "skills",
+  "constitution_version": "2.0.0"
 }

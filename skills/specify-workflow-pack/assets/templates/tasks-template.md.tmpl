@@ -1,7 +1,7 @@
 ﻿# Tasks: [FEATURE NAME]
 
 **Input**: Design documents from `/{{ARTIFACT_DIR}}/[###-feature-name]/`
-**Prerequisites**: plan.md (required), spec.md (required for user stories), research.md, data-model.md, contracts/
+**Prerequisites**: `{{BRIEF_ARTIFACT}}` (required upstream input), `plan.md` (required), `spec.md` (required for user stories), `research.md`, `data-model.md`, `contracts/`
 
 ## Format: `[ID] [P?] [Story] Description`
 
@@ -11,6 +11,7 @@
 
 ## Phase N: Polish & Cross-Cutting Concerns
 
+- [ ] TXXX Confirm implementation still matches the intent captured in `{{BRIEF_ARTIFACT}}`
 - [ ] TXXX Update TEST_REPORT.md in {{ARTIFACT_DIR}}/[###-feature-name]/TEST_REPORT.md
 - [ ] TXXX Update REVIEW_REPORT.md in {{ARTIFACT_DIR}}/[###-feature-name]/REVIEW_REPORT.md
 - [ ] TXXX Create final SNAPSHOT.md in {{ARTIFACT_DIR}}/[###-feature-name]/SNAPSHOT.md after the final validation pass
@@ -18,3 +19,4 @@
 ## Notes
 
 - Generate SNAPSHOT.md only after implementation, fix round, and final validation are complete
+- Do not mutate the canonical feature slug after `{{BRIEF_ARTIFACT}}` is approved

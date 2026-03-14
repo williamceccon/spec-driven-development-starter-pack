@@ -2,7 +2,7 @@
 
 ## Project Status
 
-{{PROJECT_NAME}} is managed with a Specify-first workflow pack.
+{{PROJECT_NAME}} is managed with a brief-first, Specify-first workflow pack.
 
 - **Primary product**: {{PRIMARY_PRODUCT}}
 - **Legacy surface**: {{LEGACY_SURFACE}}
@@ -10,32 +10,38 @@
 
 ## Official Development Model
 
-Specify is the canonical orchestrator for non-trivial work in this repository.
+Specify is the canonical orchestrator for non-trivial work in this repository, but it starts only after the brief is locked.
 
-- Start with `{{WORKFLOW_ENTRYPOINT}} <brief>` whenever possible
-- If `{{WORKFLOW_ENTRYPOINT}}` is not available, start with `/speckit.specify` and continue through the Specify flow
-- Use `BRIEF.md` as the default input source when the brief already exists in the repo
+- Start new work with `{{BRIEF_ENTRYPOINT}} <initial-feature-description>`
+- Generate `{{BRIEF_ARTIFACT}}` before any planning or implementation
+- Run `{{WORKFLOW_ENTRYPOINT}} <slug>` only after the brief is approved
+- The slug written in `{{BRIEF_ARTIFACT}}` is the canonical feature identifier
 - Canonical feature artifacts live in `{{ARTIFACT_DIR}}/<feature-branch>/`
 - Legacy PRD/SPEC flows are not the source of truth
 
 ### Official Workflow
 
-1. Capture the brief from the user or `BRIEF.md`
-2. Run `/speckit.specify`
-3. Run `/speckit.clarify` when critical ambiguity remains
-4. Run `/speckit.plan`
-5. Run `/speckit.tasks`
-6. Run `/speckit.analyze`
-7. Run `/speckit.implement`
-8. Run validation gates
-9. Run a mandatory fix round
-10. Re-run validation gates
-11. Update `TEST_REPORT.md`
-12. Update `REVIEW_REPORT.md`
-13. Generate `SNAPSHOT.md` as the last step
+1. Start with `{{BRIEF_ENTRYPOINT}} <initial-feature-description>`
+2. Use the mandatory `brainstorming` skill to refine the feature
+3. Generate `{{BRIEF_ARTIFACT}}` with a canonical slug
+4. Run `{{WORKFLOW_ENTRYPOINT}} <slug>` only if the provided slug matches the slug in `{{BRIEF_ARTIFACT}}`
+5. Run `/speckit.specify`
+6. Run `/speckit.clarify` when critical ambiguity remains
+7. Run `/speckit.plan`
+8. Run `/speckit.tasks`
+9. Run `/speckit.analyze`
+10. Run `/speckit.implement`
+11. Run validation gates
+12. Run a mandatory fix round
+13. Re-run validation gates
+14. Update `TEST_REPORT.md`
+15. Update `REVIEW_REPORT.md`
+16. Generate `SNAPSHOT.md` as the last step
 
-The workflow must stop only when:
+The workflow must stop when:
 
+- `{{BRIEF_ARTIFACT}}` is missing or empty
+- the requested workflow slug does not match the slug in `{{BRIEF_ARTIFACT}}`
 - critical ambiguity remains unresolved after clarification
 - a new technology outside the approved stack is required
 - an objective gate fails and cannot be resolved automatically
@@ -57,6 +63,32 @@ The workflow must stop only when:
 ## Repository Map
 
 {{REPOSITORY_MAP}}
+
+## Brief Contract
+
+`{{BRIEF_ARTIFACT}}` must contain at least:
+
+- Feature title
+- `- Slug: \`feature-slug\``
+- Problem or opportunity
+- Goal
+- Initial scope
+- Out of scope
+- Constraints and risks
+- Success criteria
+- Open questions that are not blocking
+
+## Required Skills
+
+Required skills for the workflow baseline:
+
+{{REQUIRED_SKILLS}}
+
+Skill precedence:
+
+1. global skill installed in `$CODEX_HOME/skills` or `~/.codex/skills`
+2. repo-local fallback under `{{LOCAL_SKILLS_DIR}}/`
+3. explicit failure from `doctor` when neither is available
 
 ## Required Artifacts
 
@@ -98,10 +130,8 @@ When a change requires a technology that is not already part of the approved sta
 4. Prefer tools that are well reviewed and offer a viable free tier
 5. Stop and request explicit approval before adding the technology to the plan or implementation
 
-## Recommended Skills
+## Recommended Skills Beyond The Baseline
 
-- `gh-fix-ci`
-- `gh-address-comments`
 - `playwright`
 - `playwright-interactive`
 - `screenshot`
@@ -111,4 +141,4 @@ When a change requires a technology that is not already part of the approved sta
 
 {{LEGACY_COMMANDS}}
 
-Use `{{WORKFLOW_ENTRYPOINT}}` instead.
+Use `{{BRIEF_ENTRYPOINT}}` first, then `{{WORKFLOW_ENTRYPOINT}}`.

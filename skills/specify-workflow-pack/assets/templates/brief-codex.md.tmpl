@@ -1,0 +1,28 @@
+﻿---
+description: Use brainstorming to turn an initial feature idea into {{BRIEF_ARTIFACT}}
+---
+
+## User Input
+
+```text
+$ARGUMENTS
+```
+
+## Outline
+
+1. Use the global `brainstorming` skill if available; otherwise read `{{LOCAL_SKILLS_DIR}}/brainstorming/SKILL.md`
+2. Start from the user's explanation of the feature they want to build
+3. Ground yourself in the current repo context before asking questions
+4. Follow the brainstorming discipline one question at a time until the understanding summary is explicitly confirmed
+5. Generate `{{BRIEF_ARTIFACT}}` with these sections:
+   - `# [Feature Title]`
+   - `- Slug: \`feature-slug\``
+   - `## Problem or Opportunity`
+   - `## Goal`
+   - `## Initial Scope`
+   - `## Out of Scope`
+   - `## Constraints and Risks`
+   - `## Success Criteria`
+   - `## Open Questions`
+6. Stop after writing `{{BRIEF_ARTIFACT}}`
+7. Instruct the user to continue with `{{WORKFLOW_ENTRYPOINT}} <slug>` using the exact slug from the brief

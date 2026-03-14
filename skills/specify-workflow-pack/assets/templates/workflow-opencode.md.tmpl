@@ -1,16 +1,24 @@
 ﻿---
-description: Run the autonomous Specify-first workflow from brief to final snapshot
+description: Validate {{BRIEF_ARTIFACT}} and run the autonomous Specify-first workflow for the matching slug
 agent: general
 subtask: false
 ---
 
 ## Autonomous Workflow
 
-Execute the canonical project workflow for feature or maintenance brief: **$ARGUMENTS**
+Run the canonical project workflow for the feature slug: **$ARGUMENTS**
+
+## Preconditions
+
+1. Read `{{BRIEF_ARTIFACT}}`
+2. Stop immediately if `{{BRIEF_ARTIFACT}}` does not exist or is empty
+3. Extract the slug from the `- Slug:` line in `{{BRIEF_ARTIFACT}}`
+4. Stop immediately if the extracted slug does not exactly match `$ARGUMENTS`
+5. Do not run brainstorming here; send the user back to `{{BRIEF_ENTRYPOINT}}` if the brief is missing or incomplete
 
 ## Workflow Stages
 
-1. Run `/speckit.specify`
+1. Run `/speckit.specify` using `{{BRIEF_ARTIFACT}}` as the feature input
 2. Run `/speckit.clarify` when critical ambiguity remains
 3. Run `/speckit.plan`
 4. If planning requires new technology outside the approved stack, STOP and request explicit approval

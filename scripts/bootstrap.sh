@@ -2,7 +2,7 @@
 set -euo pipefail
 
 echo "Checking macOS/Linux machine prerequisites..."
-for tool in git python3 node npm; do
+for tool in git python3 node npm uv poetry gh; do
   if command -v "$tool" >/dev/null 2>&1; then
     echo "Found $tool"
   else
@@ -17,6 +17,7 @@ else
 fi
 
 echo "Recommended installs if missing:"
-echo "  brew install git python@3.12 node uv"
+echo "  brew install git python@3.12 node uv gh"
 echo "  curl -sSL https://install.python-poetry.org | python3 -"
 echo "  uv tool install specify-cli --from git+https://github.com/github/spec-kit.git"
+echo "  bash ./scripts/install-workflow-pack.sh"

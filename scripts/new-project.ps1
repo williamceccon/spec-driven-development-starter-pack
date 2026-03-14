@@ -14,3 +14,7 @@ Copy-Item -Recurse -Force (Join-Path $profile '*') $targetRepo
 if (-not (Test-Path (Join-Path $targetRepo '.git'))) { git init $targetRepo | Out-Null }
 python (Join-Path $repoRoot 'skills\specify-workflow-pack\scripts\install_workflow_pack.py') --repo $targetRepo --config (Join-Path $targetRepo 'workflow-pack.json')
 Write-Host "Project created at $targetRepo"
+Write-Host 'Next steps:'
+Write-Host '  1. Review workflow-pack.json and install runtime dependencies.'
+Write-Host '  2. Run /brief "initial feature idea" inside the new repo.'
+Write-Host '  3. Run /workflow <slug> using the slug written to BRIEF.md.'

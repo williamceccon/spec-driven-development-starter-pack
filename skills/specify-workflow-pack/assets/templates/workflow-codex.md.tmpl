@@ -1,5 +1,5 @@
 ﻿---
-description: Run the autonomous Specify-first workflow from brief to final snapshot
+description: Validate {{BRIEF_ARTIFACT}} and run the autonomous Specify-first workflow for the matching slug
 ---
 
 ## User Input
@@ -10,19 +10,24 @@ $ARGUMENTS
 
 ## Outline
 
-1. Run `/speckit.specify`
-2. Run `/speckit.clarify` when critical ambiguity remains
-3. Run `/speckit.plan`
-4. If planning requires new technology outside the approved stack, STOP and request explicit approval
-5. Run `/speckit.tasks`
-6. Run `/speckit.analyze`
-7. Run `/speckit.implement`
-8. Run the blocking validation gates:
+1. Read `{{BRIEF_ARTIFACT}}`
+2. Stop if `{{BRIEF_ARTIFACT}}` does not exist or is empty
+3. Extract the slug from the `- Slug:` line in `{{BRIEF_ARTIFACT}}`
+4. Stop if the extracted slug does not exactly match `$ARGUMENTS`
+5. Do not brainstorm here; redirect to `{{BRIEF_ENTRYPOINT}}` if the brief is missing or incomplete
+6. Run `/speckit.specify` using the approved brief as input
+7. Run `/speckit.clarify` when critical ambiguity remains
+8. Run `/speckit.plan`
+9. If planning requires new technology outside the approved stack, STOP and request explicit approval
+10. Run `/speckit.tasks`
+11. Run `/speckit.analyze`
+12. Run `/speckit.implement`
+13. Run the blocking validation gates:
 {{BLOCKING_GATES_INDENTED}}
-9. Run the observational validation gates and record the outcome:
+14. Run the observational validation gates and record the outcome:
 {{OBSERVATIONAL_GATES_INDENTED}}
-10. Update `TEST_REPORT.md`
-11. Update `REVIEW_REPORT.md`
-12. Run a mandatory fix round
-13. Re-run all validation gates
-14. Generate `SNAPSHOT.md` last
+15. Update `TEST_REPORT.md`
+16. Update `REVIEW_REPORT.md`
+17. Run a mandatory fix round
+18. Re-run all validation gates
+19. Generate `SNAPSHOT.md` last

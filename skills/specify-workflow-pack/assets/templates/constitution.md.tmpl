@@ -9,35 +9,41 @@ Sync Impact Report [PREVIOUS_VERSION] -> {{CONSTITUTION_VERSION}}
 
 ## Core Principles
 
-### I. Specify-Orchestrated Spec-Driven Delivery (NON-NEGOTIABLE)
+### I. Brief-First Feature Definition (NON-NEGOTIABLE)
 
-Every non-trivial change MUST start from the Specify workflow. The canonical entrypoint is `{{WORKFLOW_ENTRYPOINT}}`, which relies on `/speckit.specify`, `/speckit.plan`, `/speckit.tasks`, `/speckit.analyze`, and `/speckit.implement`. Canonical artifacts MUST live in `{{ARTIFACT_DIR}}/<feature-branch>/`.
+Every non-trivial change MUST begin with `{{BRIEF_ENTRYPOINT}}`, not implementation. `{{BRIEF_ARTIFACT}}` MUST be created before planning or execution, and it MUST define the canonical feature slug.
 
-### II. Autonomous Workflow with Human Stop Conditions (NON-NEGOTIABLE)
+### II. Specify-Orchestrated Delivery After Brief Lock (NON-NEGOTIABLE)
 
-The default process is autonomous end-to-end. Once started, the workflow MUST continue through specification, planning, task generation, implementation, validation, fix round, report updates, and final snapshot without pausing for routine approvals. The workflow MUST stop only for unresolved critical ambiguity, explicit approval of a new technology not already in the approved stack, or an objective gate failure that cannot be resolved automatically.
+Once `{{BRIEF_ARTIFACT}}` is approved, the canonical execution entrypoint is `{{WORKFLOW_ENTRYPOINT}} <slug>`. The workflow MUST verify that the provided slug matches the slug in `{{BRIEF_ARTIFACT}}` before invoking `/speckit.specify`, `/speckit.plan`, `/speckit.tasks`, `/speckit.analyze`, and `/speckit.implement`. Canonical artifacts MUST live in `{{ARTIFACT_DIR}}/<feature-branch>/`.
 
-### III. Quality Gates and {{COVERAGE_THRESHOLD}}% Coverage (NON-NEGOTIABLE)
+### III. Autonomous Workflow with Human Stop Conditions (NON-NEGOTIABLE)
+
+The default process is autonomous end-to-end after the brief is locked. Once started, the workflow MUST continue through specification, planning, task generation, implementation, validation, fix round, report updates, and final snapshot without pausing for routine approvals. The workflow MUST stop only for missing or invalid brief state, unresolved critical ambiguity, explicit approval of a new technology not already in the approved stack, or an objective gate failure that cannot be resolved automatically.
+
+### IV. Quality Gates and {{COVERAGE_THRESHOLD}}% Coverage (NON-NEGOTIABLE)
 
 Repository quality gates are hard delivery gates. Blocking validation MUST pass before a workflow can conclude successfully. Repository coverage MUST remain at `{{COVERAGE_THRESHOLD}}%`, matching the configured threshold in the repo.
 
-### IV. CI Parity Before Completion
+### V. CI Parity Before Completion
 
 "CI green" means parity with the repo's active CI. Blocking gates MUST pass. Observational gates MUST still be executed and recorded in the reports.
 
-### V. Product Direction
+### VI. Product Direction and Technology Control
 
-The official product direction is `{{PRIMARY_PRODUCT}}`. Legacy surfaces are limited to `{{LEGACY_SURFACE}}` and MUST not become the default target for new delivery.
+The official product direction is `{{PRIMARY_PRODUCT}}`. Legacy surfaces are limited to `{{LEGACY_SURFACE}}` and MUST not become the default target for new delivery. New technology decisions MUST be documented in `research.md`, compare viable alternatives, and emphasize maturity, adoption, documentation quality, lock-in, and cost before explicit human approval.
 
-### VI. Technology Adoption Control
-
-The workflow MUST not silently introduce technology that is not already part of the approved stack. New technology decisions MUST be documented in `research.md`, compare viable alternatives, and emphasize maturity, adoption, documentation quality, lock-in, and cost. The workflow MUST stop for explicit human approval before a new technology is added to the plan or implementation.
-
-### VII. Multi-Workspace Compatibility
+### VII. Multi-Workspace Compatibility and Mandatory Skills
 
 The process is agent-agnostic and MUST remain usable across these supported workspaces:
 
 {{SUPPORTED_WORKSPACES}}
+
+Required skills for the baseline workflow are:
+
+{{REQUIRED_SKILLS}}
+
+Global skills are preferred, but repo-local fallback skills under `{{LOCAL_SKILLS_DIR}}/` are mandatory for portability.
 
 ## Technology Standards
 
@@ -48,6 +54,20 @@ The process is agent-agnostic and MUST remain usable across these supported work
 **Frontend**
 
 {{FRONTEND_STACK}}
+
+**Brief Contract**
+
+`{{BRIEF_ARTIFACT}}` MUST contain:
+
+- a feature title
+- a canonical `Slug:` line in kebab-case
+- problem or opportunity
+- goal
+- initial scope
+- out of scope
+- constraints and risks
+- success criteria
+- non-blocking open questions
 
 **Artifact Model**
 
@@ -63,19 +83,22 @@ Every non-trivial feature branch MUST maintain canonical artifacts in `{{ARTIFAC
 
 ## Official Workflow Stages
 
-1. Start from a user brief or `BRIEF.md`
-2. Run `/speckit.specify`
-3. Run `/speckit.clarify` if critical ambiguity remains
-4. Run `/speckit.plan`
-5. Run `/speckit.tasks`
-6. Run `/speckit.analyze`
-7. Run `/speckit.implement`
-8. Run the blocking validation gates
-9. Run a mandatory fix round
-10. Re-run the validation gates
-11. Update `TEST_REPORT.md`
-12. Update `REVIEW_REPORT.md`
-13. Generate `SNAPSHOT.md` last
+1. Start from `{{BRIEF_ENTRYPOINT}} <initial-feature-description>`
+2. Use `brainstorming` to refine the idea and generate `{{BRIEF_ARTIFACT}}`
+3. Run `{{WORKFLOW_ENTRYPOINT}} <slug>` using the exact slug from `{{BRIEF_ARTIFACT}}`
+4. Stop if the brief is missing, empty, or the slug does not match
+5. Run `/speckit.specify`
+6. Run `/speckit.clarify` if critical ambiguity remains
+7. Run `/speckit.plan`
+8. Run `/speckit.tasks`
+9. Run `/speckit.analyze`
+10. Run `/speckit.implement`
+11. Run the blocking validation gates
+12. Run a mandatory fix round
+13. Re-run the validation gates
+14. Update `TEST_REPORT.md`
+15. Update `REVIEW_REPORT.md`
+16. Generate `SNAPSHOT.md` last
 
 **Blocking Gates**
 

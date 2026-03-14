@@ -1,7 +1,8 @@
 ﻿# Implementation Plan: [FEATURE]
 
 **Branch**: `[###-feature-name]` | **Date**: [DATE] | **Spec**: [link]
-**Input**: Feature specification from `/{{ARTIFACT_DIR}}/[###-feature-name]/spec.md`
+**Brief**: `/{{BRIEF_ARTIFACT}}` | **Slug**: `[feature-slug-from-brief]`
+**Input**: Feature specification from `/{{ARTIFACT_DIR}}/[###-feature-name]/spec.md`, derived from the approved brief in `/{{BRIEF_ARTIFACT}}`
 
 ## Summary
 
@@ -24,4 +25,6 @@
 
 *GATE: Must pass before Phase 0 research. Re-check after Phase 1 design.*
 
-If `New Technology Approval` is marked as required, planning MUST stop after the research decision is documented and before implementation tasks are generated or executed.
+- `{{BRIEF_ARTIFACT}}` must already exist and remain aligned with the approved feature intent.
+- The feature slug used for branch planning must match the slug locked in `{{BRIEF_ARTIFACT}}`.
+- If `New Technology Approval` is marked as required, planning MUST stop after the research decision is documented and before implementation tasks are generated or executed.

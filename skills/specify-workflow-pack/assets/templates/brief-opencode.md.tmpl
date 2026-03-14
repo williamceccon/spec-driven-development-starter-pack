@@ -1,0 +1,50 @@
+﻿---
+description: Use brainstorming to turn an initial feature idea into {{BRIEF_ARTIFACT}}
+agent: general
+subtask: false
+---
+
+## Brief Generation
+
+Create or refresh `{{BRIEF_ARTIFACT}}` from the initial feature explanation: **$ARGUMENTS**
+
+## Required Skill Order
+
+1. Use the global `brainstorming` skill if it is available
+2. Otherwise read and follow `{{LOCAL_SKILLS_DIR}}/brainstorming/SKILL.md`
+3. Do not implement, plan, or run `/speckit.*` during this command
+
+## Required Behavior
+
+1. Start from the user's explanation of what they want to implement
+2. Ground yourself in the current repo context before asking questions
+3. Follow the brainstorming discipline one question at a time until understanding is locked
+4. Produce `{{BRIEF_ARTIFACT}}` only after the understanding summary and assumptions are explicitly confirmed
+5. Generate a short, stable slug in kebab-case and write it into `{{BRIEF_ARTIFACT}}`
+6. Stop after updating `{{BRIEF_ARTIFACT}}`
+
+## Required `{{BRIEF_ARTIFACT}}` Structure
+
+```md
+# [Feature Title]
+
+- Slug: `feature-slug`
+
+## Problem or Opportunity
+
+## Goal
+
+## Initial Scope
+
+## Out of Scope
+
+## Constraints and Risks
+
+## Success Criteria
+
+## Open Questions
+```
+
+## Exit Condition
+
+When `{{BRIEF_ARTIFACT}}` is complete, tell the user to run `{{WORKFLOW_ENTRYPOINT}} <slug>` using the exact slug from the brief.
