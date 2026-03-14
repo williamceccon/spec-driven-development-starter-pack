@@ -1,0 +1,115 @@
+﻿# workflow-pack.json
+
+Use `workflow-pack.json` at the repository root as the local contract for the workflow pack installer.
+
+## Required Keys
+
+```json
+{
+  "project_name": "example-project"
+}
+```
+
+## Recommended Full Example
+
+```json
+{
+  "project_name": "example-project",
+  "primary_product": "FastAPI backend + Next.js frontend",
+  "legacy_surface": "legacy CLI retained only for historical compatibility",
+  "artifact_dir": "specs",
+  "supported_workspaces": [
+    "Codex",
+    "OpenCode",
+    "GitHub Copilot",
+    "Antigravity"
+  ],
+  "coverage_threshold": 100,
+  "backend_stack": [
+    "Python 3.12+",
+    "Poetry",
+    "FastAPI",
+    "pytest",
+    "pytest-cov",
+    "black",
+    "flake8",
+    "mypy"
+  ],
+  "frontend_stack": [
+    "Next.js 14",
+    "React 18",
+    "Vitest"
+  ],
+  "repository_map": [
+    "`src/` -> application code",
+    "`tests/` -> test suite",
+    "`.specify/` -> Specify templates and constitution",
+    "`.opencode/` -> OpenCode command surface",
+    "`.codex/` -> Codex prompt surface"
+  ],
+  "blocking_gates": [
+    "poetry run black --check .",
+    "poetry run pytest --cov=src --cov-report=xml"
+  ],
+  "observational_gates": [
+    "poetry run flake8 src/ tests/",
+    "poetry run mypy src/"
+  ],
+  "frontend_validation": "cd web && npm run test",
+  "legacy_commands": [
+    "/feature",
+    "/prd",
+    "/spec",
+    "/code",
+    "/test",
+    "/review",
+    "/fix",
+    "/snapshot"
+  ],
+  "constitution_version": "1.0.0",
+  "ratified_date": "2026-03-14"
+}
+```
+
+## Supported Keys
+
+- `project_name`: Required. Display name used in generated files.
+- `primary_product`: Short statement describing the main product surface.
+- `legacy_surface`: Short statement describing what remains legacy.
+- `artifact_dir`: Defaults to `specs`.
+- `supported_workspaces`: Defaults to Codex, OpenCode, GitHub Copilot, Antigravity.
+- `coverage_threshold`: Defaults to `100`.
+- `backend_stack`: List of backend technologies.
+- `frontend_stack`: List of frontend technologies.
+- `repository_map`: List of preformatted bullet lines for the repo structure section.
+- `blocking_gates`: Commands or gate descriptions that block workflow completion.
+- `observational_gates`: Commands or checks that must be recorded but do not block completion.
+- `frontend_validation`: Optional frontend validation command.
+- `legacy_commands`: Commands that should redirect to the canonical workflow entrypoint.
+- `constitution_version`: Defaults to `1.0.0` on a fresh install.
+- `ratified_date`: Defaults to today if omitted.
+
+## Install Example
+
+```powershell
+python C:\Users\WCeccon\.codex\skills\specify-workflow-pack\scripts\install_workflow_pack.py \
+  --repo C:\path\to\repo \
+  --config C:\path\to\repo\workflow-pack.json
+```
+
+## Dry Run Example
+
+```powershell
+python C:\Users\WCeccon\.codex\skills\specify-workflow-pack\scripts\install_workflow_pack.py \
+  --repo C:\path\to\repo \
+  --config C:\path\to\repo\workflow-pack.json \
+  --dry-run
+```
+
+## Doctor Example
+
+```powershell
+python C:\Users\WCeccon\.codex\skills\specify-workflow-pack\scripts\doctor_workflow_pack.py \
+  --repo C:\path\to\repo \
+  --config C:\path\to\repo\workflow-pack.json
+```

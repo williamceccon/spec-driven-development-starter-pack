@@ -1,0 +1,12 @@
+﻿# Python / Node starter
+__pycache__/
+*.pyc
+.venv/
+venv/
+.pytest_cache/
+node_modules/
+coverage.xml
+.coverage
+.next/
+.env
+.env.local

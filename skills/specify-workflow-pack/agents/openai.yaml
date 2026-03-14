@@ -1,0 +1,4 @@
+interface:
+  display_name: "Workflow Pack"
+  short_description: "Install and sync a reusable workflow pack"
+  default_prompt: "Use -workflow-pack to install or update a Specify-first workflow pack in this repository."

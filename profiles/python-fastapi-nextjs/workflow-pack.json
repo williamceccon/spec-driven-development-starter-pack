@@ -1,0 +1,46 @@
+﻿{
+  "project_name": "REPLACE_ME",
+  "primary_product": "FastAPI backend + Next.js frontend",
+  "legacy_surface": "legacy runtime retained only for compatibility",
+  "artifact_dir": "specs",
+  "supported_workspaces": [
+    "Codex",
+    "OpenCode",
+    "GitHub Copilot",
+    "Antigravity"
+  ],
+  "coverage_threshold": 100,
+  "backend_stack": [
+    "Python 3.12+",
+    "Poetry",
+    "FastAPI",
+    "Uvicorn",
+    "pytest",
+    "pytest-cov",
+    "black",
+    "flake8",
+    "mypy"
+  ],
+  "frontend_stack": [
+    "Next.js 14",
+    "React 18",
+    "Vitest"
+  ],
+  "repository_map": [
+    "`src/` -> application code",
+    "`tests/` -> test suite",
+    "`.specify/` -> Specify templates and constitution",
+    "`.opencode/` -> OpenCode command surface",
+    "`.codex/` -> Codex prompt surface"
+  ],
+  "blocking_gates": [
+    "poetry run black --check --diff --target-version py312 .",
+    "poetry run pytest tests/ -v --tb=short --cov=src --cov-report=xml"
+  ],
+  "observational_gates": [
+    "poetry run flake8 src/ tests/",
+    "poetry run mypy src/"
+  ],
+  "frontend_validation": "cd web && npm run test",
+  "constitution_version": "1.0.0"
+}

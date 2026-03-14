@@ -1,0 +1,9 @@
+﻿# Starter repo ignores
+
+__pycache__/
+*.pyc
+.venv/
+venv/
+.pytest_cache/
+.DS_Store
+Thumbs.db

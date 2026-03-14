@@ -1,0 +1,114 @@
+﻿# {{PROJECT_NAME}}
+
+## Project Status
+
+{{PROJECT_NAME}} is managed with a Specify-first workflow pack.
+
+- **Primary product**: {{PRIMARY_PRODUCT}}
+- **Legacy surface**: {{LEGACY_SURFACE}}
+- **Roadmap**: no new feature work should target a legacy surface unless it is explicitly approved
+
+## Official Development Model
+
+Specify is the canonical orchestrator for non-trivial work in this repository.
+
+- Start with `{{WORKFLOW_ENTRYPOINT}} <brief>` whenever possible
+- If `{{WORKFLOW_ENTRYPOINT}}` is not available, start with `/speckit.specify` and continue through the Specify flow
+- Use `BRIEF.md` as the default input source when the brief already exists in the repo
+- Canonical feature artifacts live in `{{ARTIFACT_DIR}}/<feature-branch>/`
+- Legacy PRD/SPEC flows are not the source of truth
+
+### Official Workflow
+
+1. Capture the brief from the user or `BRIEF.md`
+2. Run `/speckit.specify`
+3. Run `/speckit.clarify` when critical ambiguity remains
+4. Run `/speckit.plan`
+5. Run `/speckit.tasks`
+6. Run `/speckit.analyze`
+7. Run `/speckit.implement`
+8. Run validation gates
+9. Run a mandatory fix round
+10. Re-run validation gates
+11. Update `TEST_REPORT.md`
+12. Update `REVIEW_REPORT.md`
+13. Generate `SNAPSHOT.md` as the last step
+
+The workflow must stop only when:
+
+- critical ambiguity remains unresolved after clarification
+- a new technology outside the approved stack is required
+- an objective gate fails and cannot be resolved automatically
+
+## Supported Workspaces
+
+{{SUPPORTED_WORKSPACES}}
+
+## Active Stack
+
+### Backend
+
+{{BACKEND_STACK}}
+
+### Frontend
+
+{{FRONTEND_STACK}}
+
+## Repository Map
+
+{{REPOSITORY_MAP}}
+
+## Required Artifacts
+
+Each non-trivial feature branch must maintain these artifacts in `{{ARTIFACT_DIR}}/<feature-branch>/`:
+
+- `spec.md`
+- `plan.md`
+- `tasks.md`
+- `checklists/` when needed
+- `TEST_REPORT.md`
+- `REVIEW_REPORT.md`
+- `SNAPSHOT.md`
+
+## Quality Gates
+
+### Blocking Gates
+
+{{BLOCKING_GATES}}
+
+Coverage must satisfy the repository threshold, which is currently `{{COVERAGE_THRESHOLD}}%`.
+
+### Observational Gates
+
+{{OBSERVATIONAL_GATES}}
+
+Frontend validation when applicable:
+
+{{FRONTEND_VALIDATION_NOTE}}
+
+## Technology Selection
+
+Do not introduce new technology silently.
+
+When a change requires a technology that is not already part of the approved stack:
+
+1. Record the need in `research.md`
+2. Compare realistic alternatives
+3. Evaluate maturity, adoption, documentation, lock-in, and cost
+4. Prefer tools that are well reviewed and offer a viable free tier
+5. Stop and request explicit approval before adding the technology to the plan or implementation
+
+## Recommended Skills
+
+- `gh-fix-ci`
+- `gh-address-comments`
+- `playwright`
+- `playwright-interactive`
+- `screenshot`
+- `doc`
+
+## Legacy Commands
+
+{{LEGACY_COMMANDS}}
+
+Use `{{WORKFLOW_ENTRYPOINT}}` instead.

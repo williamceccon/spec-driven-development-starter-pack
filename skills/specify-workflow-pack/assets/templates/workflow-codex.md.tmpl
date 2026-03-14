@@ -1,0 +1,28 @@
+﻿---
+description: Run the autonomous Specify-first workflow from brief to final snapshot
+---
+
+## User Input
+
+```text
+$ARGUMENTS
+```
+
+## Outline
+
+1. Run `/speckit.specify`
+2. Run `/speckit.clarify` when critical ambiguity remains
+3. Run `/speckit.plan`
+4. If planning requires new technology outside the approved stack, STOP and request explicit approval
+5. Run `/speckit.tasks`
+6. Run `/speckit.analyze`
+7. Run `/speckit.implement`
+8. Run the blocking validation gates:
+{{BLOCKING_GATES_INDENTED}}
+9. Run the observational validation gates and record the outcome:
+{{OBSERVATIONAL_GATES_INDENTED}}
+10. Update `TEST_REPORT.md`
+11. Update `REVIEW_REPORT.md`
+12. Run a mandatory fix round
+13. Re-run all validation gates
+14. Generate `SNAPSHOT.md` last
