@@ -43,6 +43,17 @@ Use `workflow-pack.json` at the repository root as the repo-local workflow contr
     "Document database migrations before merging schema changes"
   ],
   "required_skills": ["brainstorming", "gh-fix-ci", "gh-address-comments"],
+  "bundled_skills": [
+    "brainstorming",
+    "gh-fix-ci",
+    "gh-address-comments",
+    "writing-plans",
+    "verification-before-completion",
+    "systematic-debugging",
+    "test-driven-development",
+    "requesting-code-review",
+    "skill-creator"
+  ],
   "recommended_skills": {
     "core-workflow": ["brainstorming", "writing-plans", "verification-before-completion"],
     "quality": ["requesting-code-review", "systematic-debugging", "test-driven-development"]
@@ -75,6 +86,7 @@ Use `workflow-pack.json` at the repository root as the repo-local workflow contr
 - `observational_gates`: Checks that should be recorded even when non-blocking
 - `frontend_validation`: Optional frontend validation command
 - `required_skills`: Required baseline skills
+- `bundled_skills`: Repo-local vendored skills copied into generated repositories for the selected profile or add-ons
 - `recommended_skills`: Optional orchestration bundles by name
 - `brief_artifact`: Defaults to `BRIEF.md`
 - `local_skills_dir`: Defaults to `skills`
@@ -86,5 +98,6 @@ Use `workflow-pack.json` at the repository root as the repo-local workflow contr
 
 - `.workflow-pack/manifest.json` is generated from `workflow-pack.json`
 - generated repos should work with global skills or repo-local fallback skills
+- `bundled_skills` should match skills available under `skills/specify-workflow-pack/assets/bundled-skills/`
 - `BRIEF.md` is still created later by `/brief`, not by the starter generator
 - `profile` and `addons` should match the generated manifest

@@ -3,6 +3,7 @@
   "family": "orchestration",
   "version": "1.0.0",
   "description": "Recommended orchestration bundle for spec-first delivery.",
+  "bundled_skills": ["writing-plans", "verification-before-completion"],
   "recommended_skills": {
     "core-workflow": ["brainstorming", "writing-plans", "verification-before-completion"]
   },

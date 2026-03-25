@@ -24,8 +24,19 @@
     "python -m compileall src"
   ],
   "required_skills": ["brainstorming", "gh-fix-ci", "gh-address-comments"],
+  "bundled_skills": [
+    "brainstorming",
+    "gh-fix-ci",
+    "gh-address-comments",
+    "writing-plans",
+    "verification-before-completion",
+    "systematic-debugging",
+    "test-driven-development",
+    "requesting-code-review",
+    "skill-creator"
+  ],
   "recommended_skills": {
-    "quality": ["systematic-debugging", "test-driven-development"],
+    "quality": ["requesting-code-review", "systematic-debugging", "test-driven-development"],
     "maintenance": ["gh-fix-ci", "gh-address-comments"]
   },
   "install_commands": [

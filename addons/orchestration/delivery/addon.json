@@ -3,6 +3,7 @@
   "family": "orchestration",
   "version": "1.0.0",
   "description": "Recommended bundle for multi-agent or parallel delivery sessions.",
+  "bundled_skills": ["subagent-driven-development", "dispatching-parallel-agents"],
   "recommended_skills": {
     "delivery": ["subagent-driven-development", "dispatching-parallel-agents"]
   }

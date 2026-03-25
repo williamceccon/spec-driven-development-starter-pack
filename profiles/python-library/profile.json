@@ -3,5 +3,21 @@
   "display_name": "Python Library",
   "family": "packages",
   "profile_version": "1.0.0",
-  "description": "A reusable Python package starter with lightweight validation defaults."
+  "description": "A reusable Python package starter with lightweight validation defaults.",
+  "required_skills": ["brainstorming", "gh-fix-ci", "gh-address-comments"],
+  "bundled_skills": [
+    "brainstorming",
+    "gh-fix-ci",
+    "gh-address-comments",
+    "writing-plans",
+    "verification-before-completion",
+    "systematic-debugging",
+    "test-driven-development",
+    "requesting-code-review",
+    "skill-creator"
+  ],
+  "recommended_skills": {
+    "quality": ["requesting-code-review", "systematic-debugging", "test-driven-development"],
+    "core-workflow": ["brainstorming", "writing-plans", "verification-before-completion"]
+  }
 }

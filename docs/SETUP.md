@@ -15,6 +15,8 @@ A ready machine should have:
   - `gh-fix-ci`
   - `gh-address-comments`
 
+The starter also vendors curated repo-local fallback skills for the first ready profiles. See `docs/SKILLS.md`.
+
 Profile-specific tools are validated later by the doctor command once you choose a profile.
 
 ## Platform Notes

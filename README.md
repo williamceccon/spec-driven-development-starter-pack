@@ -164,6 +164,15 @@ These are optional. The base starter should still feel approachable without them
 - `quality`: `requesting-code-review`, `systematic-debugging`, `test-driven-development`
 - `maintenance`: `gh-fix-ci`, `gh-address-comments`
 
+## Curated Repo-Local Skills
+
+The starter now vendors a curated fallback set under `skills/` for the first ready profiles instead of relying only on global machine state.
+
+- core fallback: `brainstorming`, `gh-fix-ci`, `gh-address-comments`
+- implementation quality: `writing-plans`, `verification-before-completion`, `systematic-debugging`, `test-driven-development`, `requesting-code-review`
+- frontend support: `playwright` for the web-oriented profiles
+- extension path: `skill-creator` so users can create their own project skills locally
+
 ## New To GitHub?
 
 The generated README includes a section called **Create a GitHub repository and push**.
@@ -179,14 +188,15 @@ At a high level:
 
 ## Repo Layout
 
-- [`core`](/C:/Users/WCeccon/OneDrive%20-%20SLB/Documents/programming/specify-workflow-starter/.worktrees/codex/public-starter-vnext/core)
-- [`profiles`](/C:/Users/WCeccon/OneDrive%20-%20SLB/Documents/programming/specify-workflow-starter/.worktrees/codex/public-starter-vnext/profiles)
-- [`addons`](/C:/Users/WCeccon/OneDrive%20-%20SLB/Documents/programming/specify-workflow-starter/.worktrees/codex/public-starter-vnext/addons)
-- [`scripts`](/C:/Users/WCeccon/OneDrive%20-%20SLB/Documents/programming/specify-workflow-starter/.worktrees/codex/public-starter-vnext/scripts)
-- [`skills/specify-workflow-pack`](/C:/Users/WCeccon/OneDrive%20-%20SLB/Documents/programming/specify-workflow-starter/.worktrees/codex/public-starter-vnext/skills/specify-workflow-pack)
+- [`core`](core)
+- [`profiles`](profiles)
+- [`addons`](addons)
+- [`scripts`](scripts)
+- [`skills/specify-workflow-pack`](skills/specify-workflow-pack)
 
 ## Next Reading
 
-- [`docs/SETUP.md`](/C:/Users/WCeccon/OneDrive%20-%20SLB/Documents/programming/specify-workflow-starter/.worktrees/codex/public-starter-vnext/docs/SETUP.md)
-- [`docs/PROJECT_BOOTSTRAP.md`](/C:/Users/WCeccon/OneDrive%20-%20SLB/Documents/programming/specify-workflow-starter/.worktrees/codex/public-starter-vnext/docs/PROJECT_BOOTSTRAP.md)
-- [`CHANGELOG.md`](/C:/Users/WCeccon/OneDrive%20-%20SLB/Documents/programming/specify-workflow-starter/.worktrees/codex/public-starter-vnext/CHANGELOG.md)
+- [`docs/SETUP.md`](docs/SETUP.md)
+- [`docs/PROJECT_BOOTSTRAP.md`](docs/PROJECT_BOOTSTRAP.md)
+- [`docs/SKILLS.md`](docs/SKILLS.md)
+- [`CHANGELOG.md`](CHANGELOG.md)

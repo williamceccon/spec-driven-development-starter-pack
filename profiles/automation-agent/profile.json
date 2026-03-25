@@ -3,5 +3,22 @@
   "display_name": "Automation Agent",
   "family": "specialized",
   "profile_version": "1.0.0",
-  "description": "A repository shape for scripts, prompts, workflows, and agent-friendly automation."
+  "description": "A repository shape for scripts, prompts, workflows, and agent-friendly automation.",
+  "required_skills": ["brainstorming", "gh-fix-ci", "gh-address-comments"],
+  "bundled_skills": [
+    "brainstorming",
+    "gh-fix-ci",
+    "gh-address-comments",
+    "writing-plans",
+    "verification-before-completion",
+    "systematic-debugging",
+    "test-driven-development",
+    "requesting-code-review",
+    "skill-creator"
+  ],
+  "recommended_skills": {
+    "delivery": ["subagent-driven-development", "dispatching-parallel-agents"],
+    "quality": ["requesting-code-review", "systematic-debugging", "test-driven-development"],
+    "core-workflow": ["brainstorming", "writing-plans", "verification-before-completion"]
+  }
 }

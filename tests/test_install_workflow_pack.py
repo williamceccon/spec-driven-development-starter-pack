@@ -31,6 +31,7 @@ class InstallWorkflowPackTests(unittest.TestCase):
                         "project_name": "starter-demo",
                         "profile": "python-api",
                         "addons": ["postgres", "core-workflow"],
+                        "bundled_skills": ["writing-plans", "skill-creator"],
                         "supported_platforms": ["Windows", "macOS", "Linux"],
                         "recommended_skills": {
                             "core-workflow": [
@@ -48,6 +49,7 @@ class InstallWorkflowPackTests(unittest.TestCase):
 
         self.assertEqual(config["profile"], "python-api")
         self.assertEqual(config["addons"], ["postgres", "core-workflow"])
+        self.assertEqual(config["bundled_skills"], ["writing-plans", "skill-creator"])
         self.assertEqual(config["supported_platforms"], ["Windows", "macOS", "Linux"])
         self.assertIn("core-workflow", config["recommended_skills"])
         self.assertTrue(config["pack_version"])
@@ -62,6 +64,7 @@ class InstallWorkflowPackTests(unittest.TestCase):
             "profile": "python-api",
             "addons": ["postgres", "core-workflow"],
             "required_skills": ["brainstorming"],
+            "bundled_skills": ["writing-plans", "skill-creator"],
             "recommended_skills": {"core-workflow": ["writing-plans"]},
         }
 
@@ -70,6 +73,7 @@ class InstallWorkflowPackTests(unittest.TestCase):
         self.assertEqual(manifest["project_name"], "starter-demo")
         self.assertEqual(manifest["profile"]["name"], "python-api")
         self.assertEqual(manifest["addons"], ["postgres", "core-workflow"])
+        self.assertEqual(manifest["bundled_skills"], ["writing-plans", "skill-creator"])
         self.assertIn("AGENTS.md", manifest["generated_surfaces"])
         self.assertIn(".workflow-pack/manifest.json", manifest["generated_surfaces"])
         self.assertEqual(manifest["recommended_skills"]["core-workflow"], ["writing-plans"])

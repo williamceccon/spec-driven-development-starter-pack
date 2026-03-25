@@ -31,6 +31,7 @@ class DoctorWorkflowPackTests(unittest.TestCase):
                         "project_name": "starter-demo",
                         "profile": "python-api",
                         "addons": ["postgres"],
+                        "bundled_skills": ["writing-plans", "skill-creator"],
                         "recommended_skills": {"core-workflow": ["brainstorming"]}
                     }
                 ),
@@ -41,6 +42,7 @@ class DoctorWorkflowPackTests(unittest.TestCase):
 
         self.assertEqual(config["profile"], "python-api")
         self.assertEqual(config["addons"], ["postgres"])
+        self.assertEqual(config["bundled_skills"], ["writing-plans", "skill-creator"])
         self.assertEqual(config["recommended_skills"]["core-workflow"], ["brainstorming"])
 
     def test_validate_repo_requires_manifest_for_new_contract(self):

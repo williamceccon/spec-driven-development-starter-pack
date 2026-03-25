@@ -3,6 +3,7 @@
   "family": "orchestration",
   "version": "1.0.0",
   "description": "Recommended bundle for debugging, TDD, and review discipline.",
+  "bundled_skills": ["requesting-code-review", "systematic-debugging", "test-driven-development"],
   "recommended_skills": {
     "quality": ["requesting-code-review", "systematic-debugging", "test-driven-development"]
   }

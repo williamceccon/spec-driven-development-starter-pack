@@ -32,6 +32,7 @@ def load_config(config_path: Path) -> dict:
         "project_name": project_name,
         "profile": str(data.get("profile") or "generic").strip(),
         "addons": [str(addon).strip() for addon in data.get("addons", []) if str(addon).strip()],
+        "bundled_skills": [str(skill).strip() for skill in data.get("bundled_skills", []) if str(skill).strip()],
         "brief_artifact": str(data.get("brief_artifact") or "BRIEF.md").strip(),
         "local_skills_dir": str(data.get("local_skills_dir") or "skills").strip().strip("/\\"),
         "required_skills": [str(skill).strip() for skill in data.get("required_skills", DEFAULT_REQUIRED_SKILLS) if str(skill).strip()],
@@ -83,6 +84,8 @@ def validate_repo(repo: Path, config: dict, check_tools: bool = True) -> list[st
                 failures.append("Workflow manifest profile does not match workflow-pack.json")
             if manifest.get("addons", []) != config["addons"]:
                 failures.append("Workflow manifest add-ons do not match workflow-pack.json")
+            if manifest.get("bundled_skills", []) != config.get("bundled_skills", []):
+                failures.append("Workflow manifest bundled skills do not match workflow-pack.json")
     if check_tools:
         for tool in TOOLS:
             if shutil.which(tool) is None:
@@ -94,6 +97,11 @@ def validate_repo(repo: Path, config: dict, check_tools: bool = True) -> list[st
         local_skill = local_skills_dir / skill_name / "SKILL.md"
         if not global_skill.exists() and not local_skill.exists():
             failures.append(f"Required skill not available globally or locally: {skill_name}")
+
+    for skill_name in config.get("bundled_skills", []):
+        local_skill = local_skills_dir / skill_name / "SKILL.md"
+        if not local_skill.exists():
+            failures.append(f"Bundled skill not available locally: {skill_name}")
 
     return failures
 

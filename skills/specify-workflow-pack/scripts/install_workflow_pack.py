@@ -26,6 +26,7 @@ DEFAULTS = {
     "frontend_validation": "",
     "required_skills": ["brainstorming", "gh-fix-ci", "gh-address-comments"],
     "recommended_skills": {},
+    "bundled_skills": [],
     "brief_artifact": "BRIEF.md",
     "local_skills_dir": "skills",
     "legacy_commands": ["/feature", "/prd", "/spec", "/code", "/test", "/review", "/fix", "/snapshot"],
@@ -71,6 +72,7 @@ def load_config(path: Path) -> dict:
         str(platform).strip() for platform in merged.get("supported_platforms", []) if str(platform).strip()
     ]
     merged["required_skills"] = [str(skill).strip() for skill in merged.get("required_skills", []) if str(skill).strip()]
+    merged["bundled_skills"] = [str(skill).strip() for skill in merged.get("bundled_skills", []) if str(skill).strip()]
     merged["recommended_skills"] = {
         str(bundle).strip(): [str(skill).strip() for skill in skills if str(skill).strip()]
         for bundle, skills in (merged.get("recommended_skills") or {}).items()
@@ -137,6 +139,7 @@ def build_context(config: dict) -> dict:
         "BRIEF_ARTIFACT": config["brief_artifact"],
         "LOCAL_SKILLS_DIR": config["local_skills_dir"],
         "REQUIRED_SKILLS": bullet_lines(config["required_skills"], "brainstorming"),
+        "BUNDLED_SKILLS": bullet_lines([f"`{skill}`" for skill in config["bundled_skills"]], "Use only the required baseline skills"),
         "RECOMMENDED_SKILLS": bullet_lines(
             [
                 f"`{bundle}`: {', '.join(skills)}"
@@ -179,6 +182,7 @@ def build_manifest(config: dict) -> dict:
         },
         "addons": list(config.get("addons", [])),
         "required_skills": list(config.get("required_skills", [])),
+        "bundled_skills": list(config.get("bundled_skills", [])),
         "recommended_skills": dict(config.get("recommended_skills", {})),
         "supported_platforms": list(config.get("supported_platforms", DEFAULTS["supported_platforms"])),
         "supported_workspaces": list(config.get("supported_workspaces", DEFAULTS["supported_workspaces"])),
@@ -227,6 +231,7 @@ def main():
     skill_dir = Path(__file__).resolve().parent.parent
     template_dir = skill_dir / "assets" / "templates"
     required_skills_dir = skill_dir / "assets" / "required-skills"
+    bundled_skills_dir = skill_dir / "assets" / "bundled-skills"
 
     config = load_config(config_path)
     context = build_context(config)
@@ -241,12 +246,24 @@ def main():
         if target_rel:
             write_file(repo / target_rel, legacy_command_content(command), args.dry_run)
 
+    copied_skills = set()
     for skill_name in config["required_skills"]:
         source_skill = required_skills_dir / skill_name
         if not source_skill.exists():
             raise FileNotFoundError(f"Required skill bundle not found: {source_skill}")
         target_skill = repo / config["local_skills_dir"] / skill_name
         copy_required_skill(source_skill, target_skill, args.dry_run)
+        copied_skills.add(skill_name)
+
+    for skill_name in config["bundled_skills"]:
+        if skill_name in copied_skills:
+            continue
+        source_skill = bundled_skills_dir / skill_name
+        if not source_skill.exists():
+            raise FileNotFoundError(f"Bundled skill bundle not found: {source_skill}")
+        target_skill = repo / config["local_skills_dir"] / skill_name
+        copy_required_skill(source_skill, target_skill, args.dry_run)
+        copied_skills.add(skill_name)
 
     manifest_target = repo / ".workflow-pack" / "manifest.json"
     write_file(manifest_target, json.dumps(build_manifest(config), indent=2) + "\n", args.dry_run)

@@ -3,5 +3,22 @@
   "display_name": "Next.js Web App",
   "family": "apps",
   "profile_version": "1.0.0",
-  "description": "A frontend-first web application starter for React and Next.js style projects."
+  "description": "A frontend-first web application starter for React and Next.js style projects.",
+  "required_skills": ["brainstorming", "gh-fix-ci", "gh-address-comments"],
+  "bundled_skills": [
+    "brainstorming",
+    "gh-fix-ci",
+    "gh-address-comments",
+    "writing-plans",
+    "verification-before-completion",
+    "systematic-debugging",
+    "test-driven-development",
+    "requesting-code-review",
+    "playwright",
+    "skill-creator"
+  ],
+  "recommended_skills": {
+    "quality": ["requesting-code-review", "systematic-debugging", "test-driven-development"],
+    "core-workflow": ["brainstorming", "writing-plans", "verification-before-completion"]
+  }
 }

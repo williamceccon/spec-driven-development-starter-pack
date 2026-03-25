@@ -57,6 +57,7 @@ def load_profile(starter_root: Path, profile_name: str) -> dict:
     data.setdefault("observational_gates", [])
     data.setdefault("required_skills", ["brainstorming", "gh-fix-ci", "gh-address-comments"])
     data.setdefault("recommended_skills", {})
+    data.setdefault("bundled_skills", data["required_skills"])
     data.setdefault("install_commands", ["Review the generated README and install project dependencies"])
     data.setdefault("dev_commands", ["Add a development command for this profile"])
     data.setdefault("test_commands", ["Add a validation command for this profile"])
@@ -88,6 +89,7 @@ def load_addon(starter_root: Path, addon_name: str) -> dict:
         data["slug"] = addon_name
         data.setdefault("env", [])
         data.setdefault("recommended_skills", {})
+        data.setdefault("bundled_skills", [])
         data.setdefault("blocking_gates", [])
         data.setdefault("observational_gates", [])
         data.setdefault("readme_notes", [])
@@ -113,6 +115,13 @@ def merge_skill_bundles(profile: dict, addons: list[dict]) -> dict:
     return merged
 
 
+def merge_bundled_skills(profile: dict, addons: list[dict]) -> list[str]:
+    bundled = list(profile.get("bundled_skills", []))
+    for addon in addons:
+        bundled.extend(addon.get("bundled_skills", []))
+    return unique(bundled)
+
+
 def merge_env(profile: dict, addons: list[dict]) -> list[dict]:
     env_entries = list(profile.get("env", []))
     env_names = {entry["name"] for entry in env_entries}
@@ -127,6 +136,7 @@ def merge_env(profile: dict, addons: list[dict]) -> list[dict]:
 
 def merge_workflow_config(project_name: str, profile: dict, addons: list[dict]) -> dict:
     recommended_skills = merge_skill_bundles(profile, addons)
+    bundled_skills = merge_bundled_skills(profile, addons)
     return {
         "project_name": project_name,
         "pack_version": PACK_VERSION,
@@ -155,6 +165,7 @@ def merge_workflow_config(project_name: str, profile: dict, addons: list[dict]) 
         "frontend_validation": "",
         "required_skills": profile["required_skills"],
         "recommended_skills": recommended_skills,
+        "bundled_skills": bundled_skills,
         "brief_artifact": "BRIEF.md",
         "local_skills_dir": "skills",
         "constitution_version": "2.0.0",
@@ -165,6 +176,12 @@ def markdown_list(items: list[str], empty_fallback: str) -> str:
     if not items:
         return f"- {empty_fallback}"
     return "\n".join(f"- {item}" for item in items)
+
+
+def inline_code_list(items: list[str], empty_fallback: str) -> str:
+    if not items:
+        return empty_fallback
+    return ", ".join(f"`{item}`" for item in items)
 
 
 def numbered_commands(commands: list[str]) -> str:
@@ -241,6 +258,14 @@ def build_context(project_name: str, profile: dict, addons: list[dict], workflow
         "GITHUB_NOTES": github_notes(profile),
         "PUSH_TO_GITHUB": push_to_github_steps(),
         "ADDON_DETAILS": addon_details(addons),
+        "BUNDLED_SKILLS": markdown_list(
+            [f"`{skill}`" for skill in workflow_config["bundled_skills"]],
+            "No repo-local skills were bundled for this profile."
+        ),
+        "BUNDLED_SKILLS_INLINE": inline_code_list(
+            workflow_config["bundled_skills"],
+            "none"
+        ),
         "CI_SERVICES": build_ci_services(addons),
     }
 
@@ -306,6 +331,7 @@ def install_workflow_pack(starter_root: Path, target_path: Path) -> None:
     skill_dir = starter_root / "skills" / "specify-workflow-pack"
     template_dir = skill_dir / "assets" / "templates"
     required_skills_dir = skill_dir / "assets" / "required-skills"
+    bundled_skills_dir = skill_dir / "assets" / "bundled-skills"
     context = module.build_context(config)
 
     for template_name, relative_target in module.TEMPLATE_FILES.items():
@@ -317,10 +343,20 @@ def install_workflow_pack(starter_root: Path, target_path: Path) -> None:
         if target_rel:
             module.write_file(target_path / target_rel, module.legacy_command_content(command), dry_run=False)
 
+    copied_skills = set()
     for skill_name in config["required_skills"]:
         source_skill = required_skills_dir / skill_name
         target_skill = target_path / config["local_skills_dir"] / skill_name
         module.copy_required_skill(source_skill, target_skill, dry_run=False)
+        copied_skills.add(skill_name)
+
+    for skill_name in config.get("bundled_skills", []):
+        if skill_name in copied_skills:
+            continue
+        source_skill = bundled_skills_dir / skill_name
+        target_skill = target_path / config["local_skills_dir"] / skill_name
+        module.copy_required_skill(source_skill, target_skill, dry_run=False)
+        copied_skills.add(skill_name)
 
     module.write_file(
         target_path / ".workflow-pack" / "manifest.json",

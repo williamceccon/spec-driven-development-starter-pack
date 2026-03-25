@@ -40,6 +40,7 @@ The guided generator:
 - selected profile
 - selected add-ons
 - required skills
+- bundled skills
 - recommended skill bundles
 - generated repo surfaces
 
@@ -62,5 +63,6 @@ This is the machine-readable contract for future sync and drift detection work.
 - keep `.workflow-pack/manifest.json` in version control
 - keep CI aligned with the generated validation gates
 - keep required fallback skills versioned under `skills/`
+- keep bundled skill curation aligned with the selected profiles and add-ons
 - treat add-ons as explicit project decisions, not hidden defaults
 - keep `SNAPSHOT.md` as the last workflow artifact
