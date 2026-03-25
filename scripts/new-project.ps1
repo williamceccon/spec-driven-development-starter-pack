@@ -1,20 +1,24 @@
-﻿param(
-  [Parameter(Mandatory=$true)][string]$Name,
-  [Parameter(Mandatory=$true)][string]$TargetPath
+param(
+  [string]$Name,
+  [string]$TargetPath,
+  [string]$Profile,
+  [string[]]$Addons,
+  [switch]$NoGitInit,
+  [switch]$NoGitHubCi,
+  [switch]$ListProfiles,
+  [switch]$ListAddons
 )
 
 $ErrorActionPreference = 'Stop'
 $repoRoot = Split-Path $PSScriptRoot -Parent
-$profile = Join-Path $repoRoot 'profiles\python-fastapi-nextjs'
-$targetRepo = Join-Path $TargetPath $Name
-if (Test-Path $targetRepo) { throw "Target repo already exists: $targetRepo" }
-New-Item -ItemType Directory -Path $targetRepo | Out-Null
-Copy-Item -Recurse -Force (Join-Path $profile '*') $targetRepo
-(Get-Content (Join-Path $targetRepo 'workflow-pack.json') -Raw).Replace('REPLACE_ME',$Name) | Set-Content (Join-Path $targetRepo 'workflow-pack.json') -Encoding utf8
-if (-not (Test-Path (Join-Path $targetRepo '.git'))) { git init $targetRepo | Out-Null }
-python (Join-Path $repoRoot 'skills\specify-workflow-pack\scripts\install_workflow_pack.py') --repo $targetRepo --config (Join-Path $targetRepo 'workflow-pack.json')
-Write-Host "Project created at $targetRepo"
-Write-Host 'Next steps:'
-Write-Host '  1. Review workflow-pack.json and install runtime dependencies.'
-Write-Host '  2. Run /brief "initial feature idea" inside the new repo.'
-Write-Host '  3. Run /workflow <slug> using the slug written to BRIEF.md.'
+$argsList = @((Join-Path $repoRoot 'scripts\new_project.py'))
+if ($Name) { $argsList += @('--name', $Name) }
+if ($TargetPath) { $argsList += @('--target-path', $TargetPath) }
+if ($Profile) { $argsList += @('--profile', $Profile) }
+if ($Addons -and $Addons.Count -gt 0) { $argsList += @('--addons', ($Addons -join ',')) }
+if ($NoGitInit) { $argsList += '--no-git-init' }
+if ($NoGitHubCi) { $argsList += '--no-github-ci' }
+if ($ListProfiles) { $argsList += '--list-profiles' }
+if ($ListAddons) { $argsList += '--list-addons' }
+
+python @argsList

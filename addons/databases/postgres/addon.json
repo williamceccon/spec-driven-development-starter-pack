@@ -1,0 +1,32 @@
+{
+  "display_name": "Postgres",
+  "family": "databases",
+  "version": "1.0.0",
+  "description": "Adds a PostgreSQL service contract for local development and CI.",
+  "env": [
+    {
+      "name": "DATABASE_URL",
+      "value": "postgresql://postgres:postgres@localhost:5432/app",
+      "description": "Connection string for the application database"
+    }
+  ],
+  "observational_gates": [
+    "Document database migrations before merging schema changes"
+  ],
+  "ci_services": [
+    "    services:",
+    "      postgres:",
+    "        image: postgres:16",
+    "        env:",
+    "          POSTGRES_PASSWORD: postgres",
+    "          POSTGRES_DB: app",
+    "        ports:",
+    "          - 5432:5432",
+    "        options: >-",
+    "          --health-cmd \"pg_isready -U postgres\" --health-interval 10s --health-timeout 5s --health-retries 5"
+  ],
+  "readme_notes": [
+    "Use PostgreSQL for local development when you need realistic relational behavior.",
+    "Prefer explicit migrations before changing shared schema."
+  ]
+}

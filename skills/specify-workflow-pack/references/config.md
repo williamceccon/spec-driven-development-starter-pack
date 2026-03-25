@@ -1,133 +1,90 @@
-﻿# workflow-pack.json
+# workflow-pack.json
 
-Use `workflow-pack.json` at the repository root as the local contract for the workflow pack installer.
+Use `workflow-pack.json` at the repository root as the repo-local workflow contract.
 
-## Required Keys
-
-```json
-{
-  "project_name": "example-project"
-}
-```
-
-## Recommended Full Example
+## Minimum Example
 
 ```json
 {
   "project_name": "example-project",
-  "primary_product": "FastAPI backend + Next.js frontend",
-  "legacy_surface": "legacy CLI retained only for historical compatibility",
+  "profile": "python-api"
+}
+```
+
+## Recommended Example
+
+```json
+{
+  "project_name": "example-project",
+  "pack_version": "1.0.0",
+  "core_version": "1.0.0",
+  "profile": "python-api",
+  "profile_version": "1.0.0",
+  "profile_options": {},
+  "addons": ["postgres", "core-workflow"],
+  "supported_platforms": ["Windows", "macOS", "Linux"],
+  "primary_product": "Python API service",
+  "legacy_surface": "legacy runtime retained only for compatibility",
   "artifact_dir": "specs",
-  "supported_workspaces": [
-    "Codex",
-    "OpenCode",
-    "GitHub Copilot",
-    "Antigravity"
-  ],
+  "supported_workspaces": ["Codex", "OpenCode", "GitHub Copilot", "Antigravity"],
   "coverage_threshold": 100,
-  "backend_stack": [
-    "Python 3.12+",
-    "Poetry",
-    "FastAPI",
-    "pytest",
-    "pytest-cov",
-    "black",
-    "flake8",
-    "mypy"
-  ],
-  "frontend_stack": [
-    "Next.js 14",
-    "React 18",
-    "Vitest"
-  ],
+  "backend_stack": ["Python 3.12+", "venv", "pip", "HTTP service starter"],
+  "frontend_stack": [],
   "repository_map": [
-    "`src/` -> application code",
-    "`tests/` -> test suite",
-    "`skills/` -> repo-local fallback skills",
-    "`.specify/` -> Specify templates and constitution",
-    "`.opencode/` -> OpenCode command surface",
-    "`.codex/` -> Codex prompt surface"
+    "`src/` -> backend application code",
+    "`tests/` -> automated tests",
+    "`skills/` -> repo-local fallback skills"
   ],
   "blocking_gates": [
-    "poetry run black --check .",
-    "poetry run pytest --cov=src --cov-report=xml"
+    "python -m unittest discover -s tests -p 'test_*.py' -v"
   ],
   "observational_gates": [
-    "poetry run flake8 src/ tests/",
-    "poetry run mypy src/"
+    "python -m compileall src",
+    "Document database migrations before merging schema changes"
   ],
-  "frontend_validation": "cd web && npm run test",
-  "required_skills": [
-    "brainstorming",
-    "gh-fix-ci",
-    "gh-address-comments"
-  ],
+  "required_skills": ["brainstorming", "gh-fix-ci", "gh-address-comments"],
+  "recommended_skills": {
+    "core-workflow": ["brainstorming", "writing-plans", "verification-before-completion"],
+    "quality": ["requesting-code-review", "systematic-debugging", "test-driven-development"]
+  },
   "brief_artifact": "BRIEF.md",
   "local_skills_dir": "skills",
-  "legacy_commands": [
-    "/feature",
-    "/prd",
-    "/spec",
-    "/code",
-    "/test",
-    "/review",
-    "/fix",
-    "/snapshot"
-  ],
-  "constitution_version": "2.0.0",
-  "ratified_date": "2026-03-14"
+  "constitution_version": "2.0.0"
 }
 ```
 
 ## Supported Keys
 
-- `project_name`: Required. Display name used in generated files.
-- `primary_product`: Short statement describing the main product surface.
-- `legacy_surface`: Short statement describing what remains legacy.
-- `artifact_dir`: Defaults to `specs`.
-- `supported_workspaces`: Defaults to Codex, OpenCode, GitHub Copilot, Antigravity.
-- `coverage_threshold`: Defaults to `100`.
-- `backend_stack`: List of backend technologies.
-- `frontend_stack`: List of frontend technologies.
-- `repository_map`: List of preformatted bullet lines for the repo structure section.
-- `blocking_gates`: Commands or gate descriptions that block workflow completion.
-- `observational_gates`: Commands or checks that must be recorded but do not block completion.
-- `frontend_validation`: Optional frontend validation command.
-- `required_skills`: Mandatory skills for the brief-first workflow. Defaults to brainstorming, gh-fix-ci, and gh-address-comments.
-- `brief_artifact`: Defaults to `BRIEF.md`.
-- `local_skills_dir`: Defaults to `skills`.
-- `legacy_commands`: Commands that should redirect to the canonical workflow entrypoint.
-- `constitution_version`: Defaults to `2.0.0` on a fresh install.
-- `ratified_date`: Defaults to today if omitted.
+- `project_name`: Required display name for generated workflow files
+- `pack_version`: Version of the public starter pack contract
+- `core_version`: Version of the core workflow layer
+- `profile`: Selected project profile slug
+- `profile_version`: Version of the selected profile
+- `profile_options`: Optional profile-specific settings
+- `addons`: Selected add-on slugs
+- `supported_platforms`: Target operating systems for the generated repo
+- `primary_product`: Short description of the main product surface
+- `legacy_surface`: Short description of what remains legacy
+- `artifact_dir`: Defaults to `specs`
+- `supported_workspaces`: Agent/tool surfaces this repo should support
+- `coverage_threshold`: Repository threshold for coverage-sensitive workflows
+- `backend_stack`: Backend technologies for this repo
+- `frontend_stack`: Frontend technologies for this repo
+- `repository_map`: Key repo directories and responsibilities
+- `blocking_gates`: Validation commands that block completion
+- `observational_gates`: Checks that should be recorded even when non-blocking
+- `frontend_validation`: Optional frontend validation command
+- `required_skills`: Required baseline skills
+- `recommended_skills`: Optional orchestration bundles by name
+- `brief_artifact`: Defaults to `BRIEF.md`
+- `local_skills_dir`: Defaults to `skills`
+- `legacy_commands`: Deprecated commands that should redirect to the brief-first flow
+- `constitution_version`: Constitution version for generated Specify files
+- `ratified_date`: Optional initial ratified date
 
 ## Contract Notes
 
-- `BRIEF.md` is not generated by the installer. It is generated later by `/brief`.
-- `BRIEF.md` must contain a canonical `Slug:` line in kebab-case.
-- `/workflow <slug>` must use the exact slug written in `BRIEF.md`.
-- Generated repos should work with either global skills or repo-local fallback skills.
-
-## Install Example
-
-```powershell
-python C:\Users\WCeccon\.codex\skills\specify-workflow-pack\scripts\install_workflow_pack.py \
-  --repo C:\path\to\repo \
-  --config C:\path\to\repo\workflow-pack.json
-```
-
-## Dry Run Example
-
-```powershell
-python C:\Users\WCeccon\.codex\skills\specify-workflow-pack\scripts\install_workflow_pack.py \
-  --repo C:\path\to\repo \
-  --config C:\path\to\repo\workflow-pack.json \
-  --dry-run
-```
-
-## Doctor Example
-
-```powershell
-python C:\Users\WCeccon\.codex\skills\specify-workflow-pack\scripts\doctor_workflow_pack.py \
-  --repo C:\path\to\repo \
-  --config C:\path\to\repo\workflow-pack.json
-```
+- `.workflow-pack/manifest.json` is generated from `workflow-pack.json`
+- generated repos should work with global skills or repo-local fallback skills
+- `BRIEF.md` is still created later by `/brief`, not by the starter generator
+- `profile` and `addons` should match the generated manifest

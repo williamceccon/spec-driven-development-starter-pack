@@ -1,0 +1,7 @@
+{
+  "status": "planned",
+  "display_name": "CLI Tool",
+  "family": "packages",
+  "profile_version": "0.1.0",
+  "description": "Planned profile for command-line tools and automation utilities."
+}

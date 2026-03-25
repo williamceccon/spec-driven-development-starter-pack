@@ -6,8 +6,15 @@ from datetime import date
 from pathlib import Path
 
 DEFAULTS = {
+    "pack_version": "1.0.0",
+    "core_version": "1.0.0",
     "primary_product": "web-first product",
     "legacy_surface": "legacy runtime retained only for compatibility",
+    "profile": "generic",
+    "profile_version": "1.0.0",
+    "profile_options": {},
+    "addons": [],
+    "supported_platforms": ["Windows", "macOS", "Linux"],
     "artifact_dir": "specs",
     "supported_workspaces": ["Codex", "OpenCode", "GitHub Copilot", "Antigravity"],
     "coverage_threshold": 100,
@@ -18,6 +25,7 @@ DEFAULTS = {
     "observational_gates": [],
     "frontend_validation": "",
     "required_skills": ["brainstorming", "gh-fix-ci", "gh-address-comments"],
+    "recommended_skills": {},
     "brief_artifact": "BRIEF.md",
     "local_skills_dir": "skills",
     "legacy_commands": ["/feature", "/prd", "/spec", "/code", "/test", "/review", "/fix", "/snapshot"],
@@ -56,7 +64,18 @@ def load_config(path: Path) -> dict:
     merged["project_name"] = str(merged["project_name"]).strip()
     merged["brief_artifact"] = str(merged.get("brief_artifact") or "BRIEF.md").strip()
     merged["local_skills_dir"] = str(merged.get("local_skills_dir") or "skills").strip().strip("/\\")
+    merged["profile"] = str(merged.get("profile") or "generic").strip()
+    merged["profile_version"] = str(merged.get("profile_version") or "1.0.0").strip()
+    merged["addons"] = [str(addon).strip() for addon in merged.get("addons", []) if str(addon).strip()]
+    merged["supported_platforms"] = [
+        str(platform).strip() for platform in merged.get("supported_platforms", []) if str(platform).strip()
+    ]
     merged["required_skills"] = [str(skill).strip() for skill in merged.get("required_skills", []) if str(skill).strip()]
+    merged["recommended_skills"] = {
+        str(bundle).strip(): [str(skill).strip() for skill in skills if str(skill).strip()]
+        for bundle, skills in (merged.get("recommended_skills") or {}).items()
+        if str(bundle).strip()
+    }
     if not merged["required_skills"]:
         raise ValueError("workflow-pack.json must define at least one required skill")
     merged["ratified_date"] = str(merged.get("ratified_date") or date.today().isoformat())
@@ -91,8 +110,13 @@ def build_context(config: dict) -> dict:
     )
     return {
         "PROJECT_NAME": config["project_name"],
+        "PACK_VERSION": config["pack_version"],
+        "CORE_VERSION": config["core_version"],
         "PRIMARY_PRODUCT": config["primary_product"],
         "LEGACY_SURFACE": config["legacy_surface"],
+        "PROFILE_NAME": config["profile"],
+        "PROFILE_VERSION": config["profile_version"],
+        "SUPPORTED_PLATFORMS": bullet_lines(config["supported_platforms"], "Windows"),
         "ARTIFACT_DIR": config["artifact_dir"],
         "SUPPORTED_WORKSPACES": bullet_lines(config["supported_workspaces"], "Codex"),
         "BACKEND_STACK": bullet_lines(config["backend_stack"], "Define the backend stack for this repo in workflow-pack.json"),
@@ -113,6 +137,13 @@ def build_context(config: dict) -> dict:
         "BRIEF_ARTIFACT": config["brief_artifact"],
         "LOCAL_SKILLS_DIR": config["local_skills_dir"],
         "REQUIRED_SKILLS": bullet_lines(config["required_skills"], "brainstorming"),
+        "RECOMMENDED_SKILLS": bullet_lines(
+            [
+                f"`{bundle}`: {', '.join(skills)}"
+                for bundle, skills in config["recommended_skills"].items()
+            ],
+            "Document recommended orchestration bundles in workflow-pack.json",
+        ),
     }
 
 
@@ -134,6 +165,37 @@ def copy_required_skill(skill_dir: Path, target_dir: Path, dry_run: bool):
     target_dir.parent.mkdir(parents=True, exist_ok=True)
     shutil.copytree(skill_dir, target_dir)
     print(f"Copied required skill {skill_dir.name} to {target_dir}")
+
+
+def build_manifest(config: dict) -> dict:
+    return {
+        "project_name": config["project_name"],
+        "pack_version": config["pack_version"],
+        "core_version": config["core_version"],
+        "profile": {
+            "name": config["profile"],
+            "version": config.get("profile_version", DEFAULTS["profile_version"]),
+            "options": config.get("profile_options", {}),
+        },
+        "addons": list(config.get("addons", [])),
+        "required_skills": list(config.get("required_skills", [])),
+        "recommended_skills": dict(config.get("recommended_skills", {})),
+        "supported_platforms": list(config.get("supported_platforms", DEFAULTS["supported_platforms"])),
+        "supported_workspaces": list(config.get("supported_workspaces", DEFAULTS["supported_workspaces"])),
+        "generated_surfaces": [
+            "AGENTS.md",
+            ".specify/memory/constitution.md",
+            ".specify/templates/constitution-template.md",
+            ".specify/templates/plan-template.md",
+            ".specify/templates/tasks-template.md",
+            ".opencode/commands/brief.md",
+            ".opencode/commands/workflow.md",
+            ".codex/prompts/brief.md",
+            ".codex/prompts/workflow.md",
+            ".workflow-pack/manifest.json",
+        ],
+        "installed_at": date.today().isoformat(),
+    }
 
 
 def legacy_command_content(command: str) -> str:
@@ -185,6 +247,9 @@ def main():
             raise FileNotFoundError(f"Required skill bundle not found: {source_skill}")
         target_skill = repo / config["local_skills_dir"] / skill_name
         copy_required_skill(source_skill, target_skill, args.dry_run)
+
+    manifest_target = repo / ".workflow-pack" / "manifest.json"
+    write_file(manifest_target, json.dumps(build_manifest(config), indent=2) + "\n", args.dry_run)
 
     print("Dry run completed." if args.dry_run else "Workflow pack install completed.")
 

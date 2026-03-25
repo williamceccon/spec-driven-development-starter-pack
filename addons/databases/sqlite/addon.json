@@ -1,0 +1,16 @@
+{
+  "display_name": "SQLite",
+  "family": "databases",
+  "version": "1.0.0",
+  "description": "Adds a lightweight file-backed database option for local-first projects.",
+  "env": [
+    {
+      "name": "DATABASE_URL",
+      "value": "sqlite:///./app.db",
+      "description": "Connection string for the local SQLite database"
+    }
+  ],
+  "readme_notes": [
+    "SQLite is a good fit for prototypes and single-node workflows."
+  ]
+}

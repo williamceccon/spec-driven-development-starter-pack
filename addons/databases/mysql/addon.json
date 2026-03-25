@@ -1,0 +1,13 @@
+{
+  "display_name": "MySQL",
+  "family": "databases",
+  "version": "1.0.0",
+  "description": "Adds a MySQL-compatible database contract.",
+  "env": [
+    {
+      "name": "DATABASE_URL",
+      "value": "mysql://root:root@localhost:3306/app",
+      "description": "Connection string for the application database"
+    }
+  ]
+}

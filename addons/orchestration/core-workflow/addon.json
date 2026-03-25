@@ -1,0 +1,12 @@
+{
+  "display_name": "Core Workflow",
+  "family": "orchestration",
+  "version": "1.0.0",
+  "description": "Recommended orchestration bundle for spec-first delivery.",
+  "recommended_skills": {
+    "core-workflow": ["brainstorming", "writing-plans", "verification-before-completion"]
+  },
+  "readme_notes": [
+    "Use the core workflow bundle when you want stronger spec and verification discipline."
+  ]
+}

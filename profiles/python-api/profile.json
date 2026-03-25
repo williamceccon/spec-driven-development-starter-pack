@@ -1,0 +1,59 @@
+{
+  "status": "ready",
+  "display_name": "Python API",
+  "family": "apps",
+  "profile_version": "1.0.0",
+  "description": "A beginner-friendly Python backend starter with room for FastAPI-style API development.",
+  "primary_product": "Python API service",
+  "legacy_surface": "legacy scripts retained only for compatibility",
+  "supported_workspaces": ["Codex", "OpenCode", "GitHub Copilot", "Antigravity"],
+  "backend_stack": ["Python 3.12+", "venv", "pip", "HTTP service starter"],
+  "frontend_stack": [],
+  "repository_map": [
+    "`src/` -> backend application code",
+    "`tests/` -> automated tests",
+    "`skills/` -> repo-local fallback skills",
+    "`.specify/` -> Specify templates and constitution",
+    "`.opencode/` -> OpenCode command surface",
+    "`.codex/` -> Codex prompt surface"
+  ],
+  "blocking_gates": [
+    "python -m unittest discover -s tests -p 'test_*.py' -v"
+  ],
+  "observational_gates": [
+    "python -m compileall src"
+  ],
+  "required_skills": ["brainstorming", "gh-fix-ci", "gh-address-comments"],
+  "recommended_skills": {
+    "quality": ["systematic-debugging", "test-driven-development"],
+    "maintenance": ["gh-fix-ci", "gh-address-comments"]
+  },
+  "install_commands": [
+    "python -m venv .venv",
+    ".venv\\\\Scripts\\\\activate  # Windows",
+    "source .venv/bin/activate  # macOS/Linux",
+    "pip install -r requirements.txt"
+  ],
+  "dev_commands": [
+    "python -m src.main"
+  ],
+  "test_commands": [
+    "python -m unittest discover -s tests -p 'test_*.py' -v"
+  ],
+  "env": [
+    {
+      "name": "APP_ENV",
+      "value": "development",
+      "description": "Current application environment"
+    },
+    {
+      "name": "PORT",
+      "value": "8000",
+      "description": "Port used by the local API service"
+    }
+  ],
+  "github_notes": [
+    "Use `.github/workflows/ci.yml` as the default CI entrypoint.",
+    "Add branch protection after the first green CI run."
+  ]
+}

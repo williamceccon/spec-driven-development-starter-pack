@@ -1,0 +1,13 @@
+{
+  "display_name": "Redis",
+  "family": "databases",
+  "version": "1.0.0",
+  "description": "Adds a Redis cache or queue contract.",
+  "env": [
+    {
+      "name": "REDIS_URL",
+      "value": "redis://localhost:6379/0",
+      "description": "Connection string for the Redis instance"
+    }
+  ]
+}

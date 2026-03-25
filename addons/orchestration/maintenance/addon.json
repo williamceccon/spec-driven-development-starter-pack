@@ -1,0 +1,9 @@
+{
+  "display_name": "Maintenance",
+  "family": "orchestration",
+  "version": "1.0.0",
+  "description": "Recommended bundle for CI recovery and follow-up work.",
+  "recommended_skills": {
+    "maintenance": ["gh-fix-ci", "gh-address-comments"]
+  }
+}

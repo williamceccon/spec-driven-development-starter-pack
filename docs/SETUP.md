@@ -1,4 +1,4 @@
-﻿# Setup Guide
+# Setup Guide
 
 ## Machine Goals
 
@@ -6,64 +6,92 @@ A ready machine should have:
 
 - Git
 - Python 3.12+
-- Node.js 18+
-- Poetry
-- uv
 - GitHub CLI (`gh`)
 - `specify-cli`
-- a global Codex skills directory available at `$CODEX_HOME/skills` or `~/.codex/skills`
+- a global Codex skills directory at `$CODEX_HOME/skills` or `~/.codex/skills`
 - the bundled essential skills installed globally:
   - `specify-workflow-pack`
   - `brainstorming`
   - `gh-fix-ci`
   - `gh-address-comments`
 
-## Windows Notes
+Profile-specific tools are validated later by the doctor command once you choose a profile.
 
-The PowerShell bootstrap script prefers `winget` when available.
-If `winget` is unavailable, the script prints the commands you still need to run manually.
+## Platform Notes
 
-## macOS Notes
+### Windows
 
-The shell bootstrap script prefers Homebrew when available.
-If Homebrew is unavailable, the script prints the commands you still need to run manually.
+- bootstrap uses PowerShell
+- `winget` is preferred when available
+- if `winget` is unavailable, the script prints suggested manual installs
 
-## Global Skill Installation
+### macOS
 
-The starter repo bundles the required skills under `skills/`.
-Use the install script to copy them into your global Codex skills directory:
+- bootstrap uses POSIX shell
+- Homebrew is preferred when available
+- if Homebrew is unavailable, the script prints suggested manual installs
 
-- `./scripts/install-workflow-pack.ps1`
-- `bash ./scripts/install-workflow-pack.sh`
+### Linux
 
-This installs the same baseline on a fresh machine without requiring the source skill repositories.
+- bootstrap uses POSIX shell
+- the script validates the same baseline tools as macOS
+- package installation commands are printed as suggestions when a package manager is not assumed
 
-## Upstream Skill Source
+## Install the Workflow Pack Skills
 
-The bundled `brainstorming` skill comes from:
+Windows:
 
-- [benjaminasterA/antigravity-awesome-skills](https://github.com/benjaminasterA/antigravity-awesome-skills)
+```powershell
+./scripts/install-workflow-pack.ps1
+```
 
-You can refresh the upstream copy later, but the starter works from the versioned local bundle by default.
+macOS / Linux:
 
-## Repo Bootstrap
+```bash
+bash ./scripts/install-workflow-pack.sh
+```
 
-After machine setup:
+Restart Codex after installing global skills so new sessions can see them.
 
-1. Run the new-project script.
-2. Review the generated `workflow-pack.json`.
-3. Review the generated `.github/workflows/ci.yml`.
-4. Install runtime dependencies in the new repo.
-5. Start the first feature with `/brief "initial feature idea"`.
-6. Confirm the generated slug in `BRIEF.md`.
-7. Run `/workflow <slug>`.
+## Run Doctor
 
-## Skill Precedence In Generated Repos
+The doctor flow checks:
 
-Generated repos use this precedence:
+- machine tools
+- GitHub CLI auth state
+- generated repo contract when `workflow-pack.json` exists
+- `.env.example` / `.env` setup reminders
 
-1. global skill installed in `$CODEX_HOME/skills` or `~/.codex/skills`
-2. repo-local fallback skill under `skills/`
-3. explicit failure in `doctor` if neither source exists
+Windows:
 
-Restart Codex after installing new global skills so they appear in future sessions.
+```powershell
+./scripts/doctor.ps1
+```
+
+macOS / Linux:
+
+```bash
+bash ./scripts/doctor.sh
+```
+
+## Discover Profiles And Add-ons
+
+List profiles:
+
+```powershell
+./scripts/new-project.ps1 -ListProfiles
+```
+
+```bash
+bash ./scripts/new-project.sh --list-profiles
+```
+
+List add-ons:
+
+```powershell
+./scripts/new-project.ps1 -ListAddons
+```
+
+```bash
+bash ./scripts/new-project.sh --list-addons
+```

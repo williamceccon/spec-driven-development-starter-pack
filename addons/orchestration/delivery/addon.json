@@ -1,0 +1,9 @@
+{
+  "display_name": "Delivery",
+  "family": "orchestration",
+  "version": "1.0.0",
+  "description": "Recommended bundle for multi-agent or parallel delivery sessions.",
+  "recommended_skills": {
+    "delivery": ["subagent-driven-development", "dispatching-parallel-agents"]
+  }
+}

@@ -1,0 +1,7 @@
+{
+  "status": "planned",
+  "display_name": "Node API",
+  "family": "apps",
+  "profile_version": "0.1.0",
+  "description": "Planned profile for Node.js backend services."
+}

@@ -1,0 +1,7 @@
+{
+  "status": "ready",
+  "display_name": "Python Library",
+  "family": "packages",
+  "profile_version": "1.0.0",
+  "description": "A reusable Python package starter with lightweight validation defaults."
+}

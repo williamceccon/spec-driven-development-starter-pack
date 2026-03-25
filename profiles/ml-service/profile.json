@@ -1,0 +1,7 @@
+{
+  "status": "planned",
+  "display_name": "ML Service",
+  "family": "specialized",
+  "profile_version": "0.1.0",
+  "description": "Planned profile for model-serving and evaluation-focused repositories."
+}

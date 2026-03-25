@@ -1,0 +1,13 @@
+{
+  "display_name": "MongoDB",
+  "family": "databases",
+  "version": "1.0.0",
+  "description": "Adds a MongoDB document-store contract.",
+  "env": [
+    {
+      "name": "MONGODB_URL",
+      "value": "mongodb://localhost:27017/app",
+      "description": "Connection string for the MongoDB instance"
+    }
+  ]
+}

@@ -4,9 +4,20 @@
 
 {{PROJECT_NAME}} is managed with a brief-first, Specify-first workflow pack.
 
+- **Workflow pack version**: {{PACK_VERSION}}
+- **Core contract version**: {{CORE_VERSION}}
+- **Selected profile**: {{PROFILE_NAME}} (v{{PROFILE_VERSION}})
 - **Primary product**: {{PRIMARY_PRODUCT}}
 - **Legacy surface**: {{LEGACY_SURFACE}}
 - **Roadmap**: no new feature work should target a legacy surface unless it is explicitly approved
+
+## Portable Contract
+
+The repo-local contract is the source of truth for both humans and agents:
+
+- `workflow-pack.json` defines the selected profile, add-ons, and workflow gates
+- `.workflow-pack/manifest.json` records the installed core, generated surfaces, and recommended skill bundles
+- `AGENTS.md` explains the policy in plain language
 
 ## Official Development Model
 
@@ -50,6 +61,10 @@ The workflow must stop when:
 
 {{SUPPORTED_WORKSPACES}}
 
+## Supported Platforms
+
+{{SUPPORTED_PLATFORMS}}
+
 ## Active Stack
 
 ### Backend
@@ -84,6 +99,10 @@ Required skills for the workflow baseline:
 
 {{REQUIRED_SKILLS}}
 
+Recommended bundles for richer orchestration:
+
+{{RECOMMENDED_SKILLS}}
+
 Skill precedence:
 
 1. global skill installed in `$CODEX_HOME/skills` or `~/.codex/skills`
@@ -117,6 +136,16 @@ Coverage must satisfy the repository threshold, which is currently `{{COVERAGE_T
 Frontend validation when applicable:
 
 {{FRONTEND_VALIDATION_NOTE}}
+
+## Multi-Agent Coordination
+
+When multiple agents or tools collaborate in this repo:
+
+1. Claim ownership of files or a subsystem before editing
+2. Do not overwrite or revert another contributor's work without explicit approval
+3. Update shared artifacts in this order: `BRIEF.md`, workflow artifacts, tests/reports, `SNAPSHOT.md`
+4. Re-run relevant validation before handing work off
+5. Record blockers and assumptions in repo artifacts rather than private chat only
 
 ## Technology Selection
 

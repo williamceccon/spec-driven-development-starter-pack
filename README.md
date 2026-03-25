@@ -1,149 +1,192 @@
-﻿# Specify Workflow Starter
+# Specify Workflow Starter
 
-An opinionated starter repository for bootstrapping new projects with:
+A public starter platform for **spec-driven development**, **first-time vibe coding**, and **multi-agent project setup**.
 
-- machine setup for Windows and macOS
-- reusable Specify-first governance and workflow
-- repo-local `AGENTS.md`, constitution, templates, and workflow commands
-- bundled essential skills for brief generation, CI recovery, and PR comment handling
-- starter CI for Python + FastAPI + Next.js style projects
-- project bootstrap scripts for creating a new repository from zero
+This repo helps you create new repositories with:
 
-## What This Repo Provides
+- a portable workflow contract
+- guided onboarding for new users
+- reusable project profiles
+- composable add-ons such as databases and orchestration bundles
+- generated docs, env files, prompts, and workflow governance
 
-- `scripts/bootstrap.ps1` and `scripts/bootstrap.sh`
-  Install or validate core machine tools such as Git, Python, Node, Poetry, uv, GitHub CLI, and `specify-cli`.
-- `scripts/install-workflow-pack.ps1` and `scripts/install-workflow-pack.sh`
-  Install the bundled skills into the global Codex skills directory.
-- `scripts/doctor.ps1` and `scripts/doctor.sh`
-  Validate that the machine is ready for the brief-first workflow.
-- `scripts/new-project.ps1` and `scripts/new-project.sh`
-  Create a new project from the bundled starter profile and install the workflow pack into the new repo.
-- `profiles/python-fastapi-nextjs/`
-  A default profile with `.gitignore`, CI, and `workflow-pack.json`.
-- `skills/`
-  Bundled repo-local copies of `specify-workflow-pack`, `brainstorming`, `gh-fix-ci`, and `gh-address-comments`.
+## Who This Is For
+
+- developers trying spec-driven or agent-assisted development for the first time
+- teams that want consistent repo setup across Windows, macOS, and Linux
+- people who want a starter that explains GitHub, CI, env files, and first steps instead of assuming them
+
+## Supported Platforms
+
+- Windows
+- macOS
+- Linux
+
+## Supported Workspaces / Agents
+
+- Codex
+- OpenCode
+- GitHub Copilot
+- Antigravity
+
+The repo contract is **repo-first**. Tool-specific prompts are generated, but the stable source of truth is:
+
+- `workflow-pack.json`
+- `.workflow-pack/manifest.json`
+- `AGENTS.md`
 
 ## Quick Start
 
-### Windows
+### 1. Clone the starter
+
+```bash
+git clone <your-fork-or-this-repo-url>
+cd specify-workflow-starter
+```
+
+### 2. Bootstrap your machine
+
+Windows:
 
 ```powershell
 ./scripts/bootstrap.ps1
 ./scripts/install-workflow-pack.ps1
 ./scripts/doctor.ps1
-./scripts/new-project.ps1 -Name my-new-project -TargetPath C:\Users\WCeccon\OneDrive - SLB\Documents\programming
 ```
 
-### macOS
+macOS / Linux:
 
 ```bash
 bash ./scripts/bootstrap.sh
 bash ./scripts/install-workflow-pack.sh
 bash ./scripts/doctor.sh
-bash ./scripts/new-project.sh my-new-project "$HOME/Documents/programming"
 ```
 
-## Default Profile
+### 3. Create a project
 
-The bundled profile is `python-fastapi-nextjs` and assumes:
+Interactive:
 
-- Python + Poetry backend
-- FastAPI application
-- optional Next.js frontend
-- pytest, coverage, black, flake8, and mypy
-- GitHub Actions CI
-- brief-first Specify workflow with final snapshot stage
+```powershell
+./scripts/new-project.ps1
+```
 
-## Brief-First Workflow
+```bash
+bash ./scripts/new-project.sh
+```
 
-1. Start in the generated repo with `/brief "initial feature idea"`.
-2. Use the mandatory `brainstorming` skill to refine the feature.
-3. Generate `BRIEF.md` with a canonical slug.
-4. Run `/workflow <slug>` only after `BRIEF.md` is approved.
-5. Let the workflow continue through Specify, validation, fix round, reports, and final snapshot.
+Non-interactive:
 
-## Bundled Essential Skills
+```powershell
+./scripts/new-project.ps1 -Name demo-api -TargetPath C:\path\to\projects -Profile python-api -Addons postgres,core-workflow
+```
 
-The starter ships with these essential skills:
+```bash
+bash ./scripts/new-project.sh --name demo-api --target-path "$HOME/projects" --profile python-api --addons postgres,core-workflow
+```
 
-- `brainstorming`
-- `gh-fix-ci`
-- `gh-address-comments`
-- `specify-workflow-pack`
+### 4. Start the first feature
 
-Preferred precedence in generated repos:
+Inside the generated repo:
 
-1. global skill installed in `$CODEX_HOME/skills` or `~/.codex/skills`
-2. repo-local fallback under `skills/`
-3. explicit failure from `doctor` if neither is available
+1. Read `README.md`
+2. Copy `.env.example` to `.env`
+3. Run the install and validation commands from the generated README
+4. Start with `/brief "initial feature idea"`
+5. Run `/workflow <slug>` only after `BRIEF.md` is approved
 
-The `brainstorming` skill is sourced from [benjaminasterA/antigravity-awesome-skills](https://github.com/benjaminasterA/antigravity-awesome-skills).
+## Generated Flow
 
-## Typical Onboarding Flow On a New Machine
+```mermaid
+flowchart LR
+    A["Clone starter"] --> B["Bootstrap machine"]
+    B --> C["Run doctor"]
+    C --> D["Choose profile + add-ons"]
+    D --> E["Generate repo"]
+    E --> F["Read generated README + manifest"]
+    F --> G["Install dependencies"]
+    G --> H["Run first validation"]
+    H --> I["Start with /brief"]
+```
 
-1. Clone this repository.
-2. Run the platform bootstrap script.
-3. Install the bundled skills globally.
-4. Run the doctor script.
-5. Create a new project from the starter profile.
-6. Review the generated `workflow-pack.json`.
-7. In the new repo, start with `/brief "initial feature idea"`.
-8. Run `/workflow <slug>` after `BRIEF.md` is approved.
+## Profile Catalog
 
-## Roadmap
+### Ready now
 
-### v0.1 - Field Validation
+| Profile | Family | Status | Notes |
+| --- | --- | --- | --- |
+| `python-library` | packages | ready | Reusable Python packages and libraries |
+| `python-api` | apps | ready | Beginner-friendly backend/API starter |
+| `nextjs-webapp` | apps | ready | Frontend-first web application starter |
+| `fullstack-web` | apps | ready | Backend + frontend workflow shape |
+| `automation-agent` | specialized | ready | Scripts, prompts, workflows, and automation repos |
 
-Focus on validating the starter in a real new project.
+### Planned
 
-- prove the bootstrap flow on Windows and macOS
-- validate `bootstrap`, `doctor`, and `new-project` end to end
-- confirm the generated repo is ready for `Specify`, `/brief`, and CI from day one
-- collect friction points, missing setup steps, and naming issues from actual use
-- stabilize the default `python-fastapi-nextjs` profile
+| Profile | Family | Status |
+| --- | --- | --- |
+| `node-api` | apps | planned |
+| `typescript-library` | packages | planned |
+| `cli-tool` | packages | planned |
+| `data-science` | specialized | planned |
+| `ml-service` | specialized | planned |
 
-### v0.2 - Reusable Project Profiles
+## Add-on Catalog
 
-Expand the starter into a more configurable baseline for different project shapes.
+### Database add-ons
 
-- support more than one starter profile
-- make workflow configuration more declarative and easier to override per repo
-- improve generated docs for setup, daily workflow, and agent compatibility
-- add clearer CI defaults and optional gates for lint, typing, and frontend validation
-- strengthen cross-platform parity between PowerShell and shell scripts
+- `sqlite`
+- `postgres`
+- `mysql`
+- `mongodb`
+- `redis`
 
-### v0.3 - Workflow Sync and Upgrades
+### Orchestration bundles
 
-Make it easier to evolve many repositories from one maintained source.
+- `core-workflow`
+- `delivery`
+- `quality`
+- `maintenance`
 
-- add a safer sync/update path for repos created from this starter
-- version workflow-pack assets more explicitly
-- document upgrade paths for governance, templates, and commands
-- add validation checks that warn when a consuming repo drifts from the expected baseline
-- improve compatibility for Codex, OpenCode, GitHub Copilot, and Antigravity
+Add-ons can contribute:
 
-### v0.4 - Feature Insights Toolkit
+- `.env.example` entries
+- validation notes
+- GitHub Actions services
+- recommended skills
+- beginner documentation notes
 
-Introduce reusable assistance for shaping features before implementation.
+## Recommended Orchestration Skills
 
-- add a feature-insights tool or skill for turning briefs into scope, risks, open questions, and suggested slices
-- generate research prompts for unknown technology decisions
-- help compare candidate tools with a bias toward strong free tiers and low lock-in
-- identify CI, testing, and rollout implications before implementation starts
-- feed stronger inputs into `/workflow` without bloating the bootstrap layer
+These are optional. The base starter should still feel approachable without them.
 
-### v1.0 - Generic Multi-Project Platform
+- `core-workflow`: `brainstorming`, `writing-plans`, `verification-before-completion`
+- `delivery`: `subagent-driven-development`, `dispatching-parallel-agents`
+- `quality`: `requesting-code-review`, `systematic-debugging`, `test-driven-development`
+- `maintenance`: `gh-fix-ci`, `gh-address-comments`
 
-Promote the starter from validated template to durable internal platform.
+## New To GitHub?
 
-- treat this repo as the canonical source for new project initialization
-- provide a well-documented install, update, and doctor experience for multiple machines and agents
-- define stable extension points for profiles, skills, and optional workflow modules
-- keep the baseline lightweight while allowing smarter add-ons to evolve independently
-- ensure a new repo can be started with solid defaults, green CI expectations, and minimal manual setup
+The generated README includes a section called **Create a GitHub repository and push**.
+
+At a high level:
+
+1. create an empty GitHub repo
+2. initialize git if needed
+3. commit the generated files
+4. add the remote
+5. push `main`
+6. wait for the first CI run
+
+## Repo Layout
+
+- [`core`](/C:/Users/WCeccon/OneDrive%20-%20SLB/Documents/programming/specify-workflow-starter/.worktrees/codex/public-starter-vnext/core)
+- [`profiles`](/C:/Users/WCeccon/OneDrive%20-%20SLB/Documents/programming/specify-workflow-starter/.worktrees/codex/public-starter-vnext/profiles)
+- [`addons`](/C:/Users/WCeccon/OneDrive%20-%20SLB/Documents/programming/specify-workflow-starter/.worktrees/codex/public-starter-vnext/addons)
+- [`scripts`](/C:/Users/WCeccon/OneDrive%20-%20SLB/Documents/programming/specify-workflow-starter/.worktrees/codex/public-starter-vnext/scripts)
+- [`skills/specify-workflow-pack`](/C:/Users/WCeccon/OneDrive%20-%20SLB/Documents/programming/specify-workflow-starter/.worktrees/codex/public-starter-vnext/skills/specify-workflow-pack)
 
 ## Next Reading
 
-- [`docs/SETUP.md`](docs/SETUP.md)
-- [`docs/PROJECT_BOOTSTRAP.md`](docs/PROJECT_BOOTSTRAP.md)
+- [`docs/SETUP.md`](/C:/Users/WCeccon/OneDrive%20-%20SLB/Documents/programming/specify-workflow-starter/.worktrees/codex/public-starter-vnext/docs/SETUP.md)
+- [`docs/PROJECT_BOOTSTRAP.md`](/C:/Users/WCeccon/OneDrive%20-%20SLB/Documents/programming/specify-workflow-starter/.worktrees/codex/public-starter-vnext/docs/PROJECT_BOOTSTRAP.md)
+- [`CHANGELOG.md`](/C:/Users/WCeccon/OneDrive%20-%20SLB/Documents/programming/specify-workflow-starter/.worktrees/codex/public-starter-vnext/CHANGELOG.md)
