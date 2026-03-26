@@ -5,6 +5,7 @@
   "artifact_dir": "specs",
   "supported_workspaces": [
     "Codex",
+    "Claude Code",
     "OpenCode",
     "GitHub Copilot",
     "Antigravity"
@@ -29,10 +30,16 @@
   "repository_map": [
     "`src/` -> application code",
     "`tests/` -> test suite",
-    "`skills/` -> repo-local fallback skills for `/brief` and `/workflow`",
+    "`skills/` -> canonical repo-local skills source for `/brief` and `/workflow`",
+    "`.claude/skills/` -> Claude Code skill mirror",
+    "`.opencode/skills/` -> OpenCode skill mirror",
+    "`.agents/skills/` -> generic agent skill mirror",
     "`.specify/` -> Specify templates and constitution",
+    "`.claude/commands/` -> Claude Code slash commands",
     "`.opencode/` -> OpenCode command surface",
-    "`.codex/` -> Codex prompt surface"
+    "`.codex/` -> Codex prompt surface",
+    "`.github/agents/` -> GitHub Copilot custom agents",
+    "`.github/copilot-instructions.md` -> GitHub Copilot repository instructions"
   ],
   "blocking_gates": [
     "poetry run black --check --diff --target-version py312 .",

@@ -3,17 +3,23 @@
 $ErrorActionPreference = 'Stop'
 $repoRoot = Split-Path $PSScriptRoot -Parent
 $skillsSource = Join-Path $repoRoot 'skills'
-$codeHome = if ($env:CODEX_HOME) { $env:CODEX_HOME } else { Join-Path $HOME '.codex' }
-$skillsTarget = Join-Path $codeHome 'skills'
-New-Item -ItemType Directory -Force -Path $skillsTarget | Out-Null
+$targets = @(
+  @{ Name = 'Codex'; Path = (Join-Path (if ($env:CODEX_HOME) { $env:CODEX_HOME } else { Join-Path $HOME '.codex' }) 'skills') },
+  @{ Name = 'Claude Code'; Path = (Join-Path $HOME '.claude\skills') },
+  @{ Name = 'OpenCode'; Path = (Join-Path $HOME '.config\opencode\skills') },
+  @{ Name = 'Generic Agents'; Path = (Join-Path $HOME '.agents\skills') }
+)
 
-Get-ChildItem $skillsSource -Directory | ForEach-Object {
-  $target = Join-Path $skillsTarget $_.Name
-  if (Test-Path $target) {
-    Remove-Item -Recurse -Force $target
+foreach ($targetInfo in $targets) {
+  New-Item -ItemType Directory -Force -Path $targetInfo.Path | Out-Null
+  Get-ChildItem $skillsSource -Directory | ForEach-Object {
+    $target = Join-Path $targetInfo.Path $_.Name
+    if (Test-Path $target) {
+      Remove-Item -Recurse -Force $target
+    }
+    Copy-Item -Recurse -Force $_.FullName $target
+    Write-Host "Installed $($_.Name) to $target for $($targetInfo.Name)"
   }
-  Copy-Item -Recurse -Force $_.FullName $target
-  Write-Host "Installed $($_.Name) to $target"
 }
 
-Write-Host 'Restart Codex to pick up new skills.'
+Write-Host 'Restart the agent session you use so new global skills are discovered.'

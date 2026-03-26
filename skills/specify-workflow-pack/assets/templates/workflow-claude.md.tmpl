@@ -1,0 +1,33 @@
+---
+description: Validate {{BRIEF_ARTIFACT}} and run the autonomous Specify-first workflow for the matching slug
+argument-hint: <feature-slug>
+---
+
+Run the canonical workflow for the feature slug: **$ARGUMENTS**
+
+## Preconditions
+
+1. Read `{{BRIEF_ARTIFACT}}`.
+2. Stop if the brief is missing or empty.
+3. Extract the slug from the `- Slug:` line.
+4. Stop if the slug does not exactly match `$ARGUMENTS`.
+5. If the brief is missing or incomplete, send the user back to `/brief`.
+
+## Workflow Stages
+
+1. Run `/speckit.specify` using the approved brief as input.
+2. Run `/speckit.clarify` when critical ambiguity remains.
+3. Run `/speckit.plan`.
+4. If planning requires new technology outside the approved stack, STOP and request explicit approval.
+5. Run `/speckit.tasks`.
+6. Run `/speckit.analyze`.
+7. Run `/speckit.implement`.
+8. Run the blocking validation gates:
+{{BLOCKING_GATES_INDENTED}}
+9. Run the observational validation gates and record the outcome:
+{{OBSERVATIONAL_GATES_INDENTED}}
+10. Update `TEST_REPORT.md`.
+11. Update `REVIEW_REPORT.md`.
+12. Run a mandatory fix round.
+13. Re-run all validation gates.
+14. Generate `SNAPSHOT.md` last.

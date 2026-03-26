@@ -66,6 +66,7 @@ class InstallWorkflowPackTests(unittest.TestCase):
             "required_skills": ["brainstorming"],
             "bundled_skills": ["writing-plans", "skill-creator"],
             "recommended_skills": {"core-workflow": ["writing-plans"]},
+            "supported_workspaces": ["Codex", "Claude Code", "OpenCode", "GitHub Copilot", "Antigravity"],
         }
 
         manifest = module.build_manifest(config)
@@ -75,8 +76,13 @@ class InstallWorkflowPackTests(unittest.TestCase):
         self.assertEqual(manifest["addons"], ["postgres", "core-workflow"])
         self.assertEqual(manifest["bundled_skills"], ["writing-plans", "skill-creator"])
         self.assertIn("AGENTS.md", manifest["generated_surfaces"])
+        self.assertIn("CLAUDE.md", manifest["generated_surfaces"])
+        self.assertIn(".github/copilot-instructions.md", manifest["generated_surfaces"])
+        self.assertIn(".claude/commands/brief.md", manifest["generated_surfaces"])
+        self.assertIn(".github/agents/brief.agent.md", manifest["generated_surfaces"])
         self.assertIn(".workflow-pack/manifest.json", manifest["generated_surfaces"])
         self.assertEqual(manifest["recommended_skills"]["core-workflow"], ["writing-plans"])
+        self.assertIn("Claude Code", manifest["supported_workspaces"])
 
 
 if __name__ == "__main__":

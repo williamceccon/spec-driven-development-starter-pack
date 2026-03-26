@@ -17,7 +17,8 @@ The repo-local contract is the source of truth for both humans and agents:
 
 - `workflow-pack.json` defines the selected profile, add-ons, and workflow gates
 - `.workflow-pack/manifest.json` records the installed core, generated surfaces, and recommended skill bundles
-- `AGENTS.md` explains the policy in plain language
+- `AGENTS.md` and `CLAUDE.md` explain the policy in plain language
+- `.github/copilot-instructions.md` and `.github/agents/` define the GitHub Copilot surface
 
 ## Official Development Model
 
@@ -109,8 +110,8 @@ Recommended bundles for richer orchestration:
 
 Skill precedence:
 
-1. global skill installed in `$CODEX_HOME/skills` or `~/.codex/skills`
-2. repo-local fallback under `{{LOCAL_SKILLS_DIR}}/`
+1. agent-native global skills, when supported, such as `$CODEX_HOME/skills`, `~/.claude/skills`, or `~/.config/opencode/skills`
+2. repo-local mirrors under `{{LOCAL_SKILLS_DIR}}/`, `.claude/skills/`, `.opencode/skills/`, and `.agents/skills/`
 3. explicit failure from `doctor` when neither is available
 
 ## Required Artifacts

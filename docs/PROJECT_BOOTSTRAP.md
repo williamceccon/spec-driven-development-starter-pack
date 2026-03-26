@@ -20,6 +20,12 @@ The guided generator:
 - `workflow-pack.json`
 - `.workflow-pack/manifest.json`
 - `AGENTS.md`
+- `CLAUDE.md`
+- `.github/copilot-instructions.md`
+- `.github/agents/brief.agent.md`
+- `.github/agents/workflow.agent.md`
+- `.claude/commands/brief.md`
+- `.claude/commands/workflow.md`
 - `.specify/memory/constitution.md`
 - `.specify/templates/constitution-template.md`
 - `.specify/templates/plan-template.md`
@@ -28,7 +34,7 @@ The guided generator:
 - `.opencode/commands/workflow.md`
 - `.codex/prompts/brief.md`
 - `.codex/prompts/workflow.md`
-- repo-local fallback skills under `skills/`
+- repo-local fallback skills under `skills/`, mirrored to `.claude/skills/`, `.opencode/skills/`, and `.agents/skills/`
 - profile starter files such as `.gitignore`, CI, or starter source files
 
 ## Why The Manifest Matters

@@ -1,0 +1,24 @@
+# GitHub Copilot Instructions
+
+Use this repository's spec-driven workflow as the default operating model.
+
+## Required Entry Points
+
+- Start new non-trivial work from `{{BRIEF_ARTIFACT}}` using the brief workflow.
+- Do not skip directly to implementation when the feature still needs clarification.
+- Use the matching workflow process only after the brief slug is approved.
+
+## Source Of Truth
+
+- `workflow-pack.json`
+- `.workflow-pack/manifest.json`
+- `AGENTS.md`
+- `CLAUDE.md`
+
+## Required Behavior
+
+- Respect the selected profile: `{{PROFILE_NAME}}`.
+- Respect the configured add-ons and quality gates.
+- Do not overwrite or revert another collaborator's work without explicit approval.
+- Keep shared artifacts updated before claiming completion.
+- Use the generated custom agents in `.github/agents/` for the brief and workflow flows when appropriate.

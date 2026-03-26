@@ -6,16 +6,22 @@
   "description": "A beginner-friendly Python backend starter with room for FastAPI-style API development.",
   "primary_product": "Python API service",
   "legacy_surface": "legacy scripts retained only for compatibility",
-  "supported_workspaces": ["Codex", "OpenCode", "GitHub Copilot", "Antigravity"],
+  "supported_workspaces": ["Codex", "Claude Code", "OpenCode", "GitHub Copilot", "Antigravity"],
   "backend_stack": ["Python 3.12+", "venv", "pip", "HTTP service starter"],
   "frontend_stack": [],
   "repository_map": [
     "`src/` -> backend application code",
     "`tests/` -> automated tests",
-    "`skills/` -> repo-local fallback skills",
+    "`skills/` -> canonical repo-local skill source",
+    "`.claude/skills/` -> Claude Code skill mirror",
+    "`.opencode/skills/` -> OpenCode skill mirror",
+    "`.agents/skills/` -> generic agent skill mirror",
     "`.specify/` -> Specify templates and constitution",
+    "`.claude/commands/` -> Claude Code slash commands",
     "`.opencode/` -> OpenCode command surface",
-    "`.codex/` -> Codex prompt surface"
+    "`.codex/` -> Codex prompt surface",
+    "`.github/agents/` -> GitHub Copilot custom agents",
+    "`.github/copilot-instructions.md` -> GitHub Copilot repository instructions"
   ],
   "blocking_gates": [
     "python -m unittest discover -s tests -p 'test_*.py' -v"

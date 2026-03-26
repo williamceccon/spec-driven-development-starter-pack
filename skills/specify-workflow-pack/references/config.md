@@ -26,14 +26,17 @@ Use `workflow-pack.json` at the repository root as the repo-local workflow contr
   "primary_product": "Python API service",
   "legacy_surface": "legacy runtime retained only for compatibility",
   "artifact_dir": "specs",
-  "supported_workspaces": ["Codex", "OpenCode", "GitHub Copilot", "Antigravity"],
+  "supported_workspaces": ["Codex", "Claude Code", "OpenCode", "GitHub Copilot", "Antigravity"],
   "coverage_threshold": 100,
   "backend_stack": ["Python 3.12+", "venv", "pip", "HTTP service starter"],
   "frontend_stack": [],
   "repository_map": [
     "`src/` -> backend application code",
     "`tests/` -> automated tests",
-    "`skills/` -> repo-local fallback skills"
+    "`skills/` -> canonical repo-local skills source",
+    "`.claude/skills/` -> Claude Code skill mirror",
+    "`.opencode/skills/` -> OpenCode skill mirror",
+    "`.agents/skills/` -> generic agent skill mirror"
   ],
   "blocking_gates": [
     "python -m unittest discover -s tests -p 'test_*.py' -v"
@@ -98,6 +101,7 @@ Use `workflow-pack.json` at the repository root as the repo-local workflow contr
 
 - `.workflow-pack/manifest.json` is generated from `workflow-pack.json`
 - generated repos should work with global skills or repo-local fallback skills
+- generated repos should mirror skills into `.claude/skills/`, `.opencode/skills/`, and `.agents/skills/` when these surfaces are enabled
 - `bundled_skills` should match skills available under `skills/specify-workflow-pack/assets/bundled-skills/`
 - `BRIEF.md` is still created later by `/brief`, not by the starter generator
 - `profile` and `addons` should match the generated manifest

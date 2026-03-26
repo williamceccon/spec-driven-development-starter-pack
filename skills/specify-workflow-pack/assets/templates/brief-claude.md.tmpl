@@ -1,0 +1,14 @@
+---
+description: Use brainstorming to turn an initial feature idea into {{BRIEF_ARTIFACT}}
+argument-hint: <initial-feature-description>
+---
+
+Create or refresh `{{BRIEF_ARTIFACT}}` from the user's idea: **$ARGUMENTS**
+
+## Required Behavior
+
+1. Use the global `brainstorming` skill if available, otherwise use the repo-local fallback from `.claude/skills/brainstorming/` or `{{LOCAL_SKILLS_DIR}}/brainstorming/`.
+2. Ground yourself in the current repo context before asking follow-up questions.
+3. Follow the brainstorming discipline one question at a time until the understanding summary is explicitly confirmed.
+4. Only then write `{{BRIEF_ARTIFACT}}` with a stable kebab-case slug.
+5. Stop after updating the brief and tell the user to run `/workflow <slug>` with the exact slug from the brief.

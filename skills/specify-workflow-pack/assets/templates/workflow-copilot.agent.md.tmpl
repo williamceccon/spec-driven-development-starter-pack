@@ -1,0 +1,14 @@
+---
+name: workflow
+description: Validate {{BRIEF_ARTIFACT}} and execute the repo's autonomous Specify-first workflow for the approved slug.
+---
+
+Use this agent only after `{{BRIEF_ARTIFACT}}` exists and its slug is approved.
+
+## Instructions
+
+1. Read `{{BRIEF_ARTIFACT}}`.
+2. Stop if the file is missing, empty, or the slug does not match the requested workflow.
+3. Run the canonical spec-driven workflow stages in order.
+4. Stop for unresolved critical ambiguity, explicit approval needs for new technology, or blocking gate failures that cannot be resolved automatically.
+5. Re-run validation gates and update the required reports before completion.

@@ -31,6 +31,7 @@ class DoctorWorkflowPackTests(unittest.TestCase):
                         "project_name": "starter-demo",
                         "profile": "python-api",
                         "addons": ["postgres"],
+                        "supported_workspaces": ["Codex", "Claude Code", "OpenCode", "GitHub Copilot", "Antigravity"],
                         "bundled_skills": ["writing-plans", "skill-creator"],
                         "recommended_skills": {"core-workflow": ["brainstorming"]}
                     }
@@ -42,6 +43,7 @@ class DoctorWorkflowPackTests(unittest.TestCase):
 
         self.assertEqual(config["profile"], "python-api")
         self.assertEqual(config["addons"], ["postgres"])
+        self.assertIn("Claude Code", config["supported_workspaces"])
         self.assertEqual(config["bundled_skills"], ["writing-plans", "skill-creator"])
         self.assertEqual(config["recommended_skills"]["core-workflow"], ["brainstorming"])
 
@@ -54,6 +56,8 @@ class DoctorWorkflowPackTests(unittest.TestCase):
             "required_skills": ["brainstorming"],
             "profile": "python-api",
             "addons": ["postgres"],
+            "supported_workspaces": ["Codex", "Claude Code", "OpenCode", "GitHub Copilot", "Antigravity"],
+            "bundled_skills": [],
             "recommended_skills": {}
         }
 

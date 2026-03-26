@@ -8,7 +8,7 @@ from pathlib import Path
 
 
 SUPPORTED_PLATFORMS = ["Windows", "macOS", "Linux"]
-SUPPORTED_WORKSPACES = ["Codex", "OpenCode", "GitHub Copilot", "Antigravity"]
+SUPPORTED_WORKSPACES = ["Codex", "Claude Code", "OpenCode", "GitHub Copilot", "Antigravity"]
 PACK_VERSION = "1.0.0"
 CORE_VERSION = "1.0.0"
 
@@ -241,6 +241,23 @@ def push_to_github_steps() -> str:
     )
 
 
+def workspace_usage_notes(workspaces: list[str]) -> str:
+    notes = []
+    if "Codex" in workspaces:
+        notes.append("- `Codex`: use `.codex/prompts/brief.md` and `.codex/prompts/workflow.md`.")
+    if "Claude Code" in workspaces:
+        notes.append("- `Claude Code`: use `/brief` and `/workflow` from `.claude/commands/`, with shared policy in `CLAUDE.md`.")
+    if "OpenCode" in workspaces:
+        notes.append("- `OpenCode`: use `/brief` and `/workflow` from `.opencode/commands/`.")
+    if "GitHub Copilot" in workspaces:
+        notes.append("- `GitHub Copilot`: use `.github/copilot-instructions.md` and the custom agents in `.github/agents/`.")
+    if "Antigravity" in workspaces:
+        notes.append("- `Antigravity`: use `AGENTS.md` and `.agents/skills/` as the compatibility surface.")
+    if not notes:
+        notes.append("- Use the generated repo contract files with the workspace supported by your tool.")
+    return "\n".join(notes)
+
+
 def build_context(project_name: str, profile: dict, addons: list[dict], workflow_config: dict) -> dict[str, str]:
     return {
         "PROJECT_NAME": project_name,
@@ -250,6 +267,7 @@ def build_context(project_name: str, profile: dict, addons: list[dict], workflow
         "ADDON_LIST": ", ".join(f"`{addon['slug']}`" for addon in addons) if addons else "none",
         "SUPPORTED_PLATFORMS": ", ".join(SUPPORTED_PLATFORMS),
         "SUPPORTED_WORKSPACES": ", ".join(workflow_config["supported_workspaces"]),
+        "WORKSPACE_USAGE": workspace_usage_notes(workflow_config["supported_workspaces"]),
         "INSTALL_COMMANDS": numbered_commands(profile["install_commands"]),
         "DEV_COMMANDS": numbered_commands(profile["dev_commands"]),
         "TEST_COMMANDS": numbered_commands(profile["test_commands"]),
@@ -334,7 +352,7 @@ def install_workflow_pack(starter_root: Path, target_path: Path) -> None:
     bundled_skills_dir = skill_dir / "assets" / "bundled-skills"
     context = module.build_context(config)
 
-    for template_name, relative_target in module.TEMPLATE_FILES.items():
+    for relative_target, template_name in module.TEMPLATE_FILES.items():
         template_text = (template_dir / template_name).read_text(encoding="utf-8")
         module.write_file(target_path / relative_target, module.render(template_text, context), dry_run=False)
 
@@ -346,16 +364,18 @@ def install_workflow_pack(starter_root: Path, target_path: Path) -> None:
     copied_skills = set()
     for skill_name in config["required_skills"]:
         source_skill = required_skills_dir / skill_name
-        target_skill = target_path / config["local_skills_dir"] / skill_name
-        module.copy_required_skill(source_skill, target_skill, dry_run=False)
+        for relative_target in module.repo_skill_targets(config):
+            target_skill = target_path / relative_target / skill_name
+            module.copy_required_skill(source_skill, target_skill, dry_run=False)
         copied_skills.add(skill_name)
 
     for skill_name in config.get("bundled_skills", []):
         if skill_name in copied_skills:
             continue
         source_skill = bundled_skills_dir / skill_name
-        target_skill = target_path / config["local_skills_dir"] / skill_name
-        module.copy_required_skill(source_skill, target_skill, dry_run=False)
+        for relative_target in module.repo_skill_targets(config):
+            target_skill = target_path / relative_target / skill_name
+            module.copy_required_skill(source_skill, target_skill, dry_run=False)
         copied_skills.add(skill_name)
 
     module.write_file(

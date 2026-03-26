@@ -42,6 +42,8 @@ The stable source of truth in generated projects is:
 - `workflow-pack.json`
 - `.workflow-pack/manifest.json`
 - `AGENTS.md`
+- `CLAUDE.md`
+- `.github/copilot-instructions.md`
 
 Tool-specific prompts are generated from that contract instead of becoming the contract themselves.
 
@@ -225,11 +227,23 @@ See [`docs/SKILLS.md`](docs/SKILLS.md) for the current skill matrix by profile.
 ## Supported Workspaces and Agents
 
 - Codex
+- Claude Code
 - OpenCode
 - GitHub Copilot
 - Antigravity
 
 The project contract stays repo-centric so these surfaces can coexist without making the repository dependent on a single agent implementation.
+
+Verified surfaces in this pack:
+
+- `Codex`
+- `Claude Code`
+- `OpenCode`
+- `GitHub Copilot`
+
+Compatibility surface:
+
+- `Antigravity` via `AGENTS.md` and `.agents/skills/` conventions until official vendor docs can be validated in this pack
 
 ## Repository Layout
 

@@ -16,7 +16,7 @@ DEFAULTS = {
     "addons": [],
     "supported_platforms": ["Windows", "macOS", "Linux"],
     "artifact_dir": "specs",
-    "supported_workspaces": ["Codex", "OpenCode", "GitHub Copilot", "Antigravity"],
+    "supported_workspaces": ["Codex", "Claude Code", "OpenCode", "GitHub Copilot", "Antigravity"],
     "coverage_threshold": 100,
     "backend_stack": [],
     "frontend_stack": [],
@@ -33,16 +33,24 @@ DEFAULTS = {
     "constitution_version": "2.0.0",
 }
 
+REPO_SKILL_MIRRORS = ["skills", ".claude/skills", ".opencode/skills", ".agents/skills"]
+
 TEMPLATE_FILES = {
-    "AGENTS.md.tmpl": "AGENTS.md",
-    "constitution.md.tmpl": ".specify/memory/constitution.md",
-    "constitution-template.md.tmpl": ".specify/templates/constitution-template.md",
-    "plan-template.md.tmpl": ".specify/templates/plan-template.md",
-    "tasks-template.md.tmpl": ".specify/templates/tasks-template.md",
-    "brief-opencode.md.tmpl": ".opencode/commands/brief.md",
-    "workflow-opencode.md.tmpl": ".opencode/commands/workflow.md",
-    "brief-codex.md.tmpl": ".codex/prompts/brief.md",
-    "workflow-codex.md.tmpl": ".codex/prompts/workflow.md",
+    "AGENTS.md": "AGENTS.md.tmpl",
+    "CLAUDE.md": "AGENTS.md.tmpl",
+    ".github/copilot-instructions.md": "copilot-instructions.md.tmpl",
+    ".github/agents/brief.agent.md": "brief-copilot.agent.md.tmpl",
+    ".github/agents/workflow.agent.md": "workflow-copilot.agent.md.tmpl",
+    ".specify/memory/constitution.md": "constitution.md.tmpl",
+    ".specify/templates/constitution-template.md": "constitution-template.md.tmpl",
+    ".specify/templates/plan-template.md": "plan-template.md.tmpl",
+    ".specify/templates/tasks-template.md": "tasks-template.md.tmpl",
+    ".claude/commands/brief.md": "brief-claude.md.tmpl",
+    ".claude/commands/workflow.md": "workflow-claude.md.tmpl",
+    ".opencode/commands/brief.md": "brief-opencode.md.tmpl",
+    ".opencode/commands/workflow.md": "workflow-opencode.md.tmpl",
+    ".codex/prompts/brief.md": "brief-codex.md.tmpl",
+    ".codex/prompts/workflow.md": "workflow-codex.md.tmpl",
 }
 
 LEGACY_COMMAND_TARGETS = {
@@ -70,6 +78,9 @@ def load_config(path: Path) -> dict:
     merged["addons"] = [str(addon).strip() for addon in merged.get("addons", []) if str(addon).strip()]
     merged["supported_platforms"] = [
         str(platform).strip() for platform in merged.get("supported_platforms", []) if str(platform).strip()
+    ]
+    merged["supported_workspaces"] = [
+        str(workspace).strip() for workspace in merged.get("supported_workspaces", []) if str(workspace).strip()
     ]
     merged["required_skills"] = [str(skill).strip() for skill in merged.get("required_skills", []) if str(skill).strip()]
     merged["bundled_skills"] = [str(skill).strip() for skill in merged.get("bundled_skills", []) if str(skill).strip()]
@@ -121,6 +132,10 @@ def build_context(config: dict) -> dict:
         "SUPPORTED_PLATFORMS": bullet_lines(config["supported_platforms"], "Windows"),
         "ARTIFACT_DIR": config["artifact_dir"],
         "SUPPORTED_WORKSPACES": bullet_lines(config["supported_workspaces"], "Codex"),
+        "WORKSPACE_USAGE": bullet_lines(
+            workspace_usage_notes(config["supported_workspaces"]),
+            "Use the generated contract files in the workspace supported by your tool.",
+        ),
         "BACKEND_STACK": bullet_lines(config["backend_stack"], "Define the backend stack for this repo in workflow-pack.json"),
         "FRONTEND_STACK": bullet_lines(config["frontend_stack"], "Define the frontend stack for this repo in workflow-pack.json or remove the section if not applicable"),
         "REPOSITORY_MAP": bullet_lines(config["repository_map"], "Fill in the concrete repository map for this project"),
@@ -147,7 +162,22 @@ def build_context(config: dict) -> dict:
             ],
             "Document recommended orchestration bundles in workflow-pack.json",
         ),
-    }
+}
+
+
+def workspace_usage_notes(workspaces: list[str]) -> list[str]:
+    notes = []
+    if "Codex" in workspaces:
+        notes.append("`Codex`: use `.codex/prompts/brief.md` and `.codex/prompts/workflow.md`, with repo-local skills mirrored from `skills/`.")
+    if "Claude Code" in workspaces:
+        notes.append("`Claude Code`: use `/brief` and `/workflow` from `.claude/commands/`, with shared policy in `CLAUDE.md` and skills mirrored under `.claude/skills/`.")
+    if "OpenCode" in workspaces:
+        notes.append("`OpenCode`: use `/brief` and `/workflow` from `.opencode/commands/`, with repo-local skills mirrored under `.opencode/skills/`.")
+    if "GitHub Copilot" in workspaces:
+        notes.append("`GitHub Copilot`: use `.github/copilot-instructions.md` plus the custom agents in `.github/agents/brief.agent.md` and `.github/agents/workflow.agent.md`.")
+    if "Antigravity" in workspaces:
+        notes.append("`Antigravity`: use `AGENTS.md` plus the generic `.agents/skills/` mirror. This surface follows shared repo conventions and should be treated as compatibility support unless you verify newer vendor docs.")
+    return notes
 
 
 def write_file(target: Path, content: str, dry_run: bool):
@@ -170,6 +200,14 @@ def copy_required_skill(skill_dir: Path, target_dir: Path, dry_run: bool):
     print(f"Copied required skill {skill_dir.name} to {target_dir}")
 
 
+def repo_skill_targets(config: dict) -> list[str]:
+    targets = [config["local_skills_dir"]]
+    for mirror in REPO_SKILL_MIRRORS:
+        if mirror not in targets:
+            targets.append(mirror)
+    return targets
+
+
 def build_manifest(config: dict) -> dict:
     return {
         "project_name": config["project_name"],
@@ -188,14 +226,24 @@ def build_manifest(config: dict) -> dict:
         "supported_workspaces": list(config.get("supported_workspaces", DEFAULTS["supported_workspaces"])),
         "generated_surfaces": [
             "AGENTS.md",
+            "CLAUDE.md",
+            ".github/copilot-instructions.md",
+            ".github/agents/brief.agent.md",
+            ".github/agents/workflow.agent.md",
             ".specify/memory/constitution.md",
             ".specify/templates/constitution-template.md",
             ".specify/templates/plan-template.md",
             ".specify/templates/tasks-template.md",
+            ".claude/commands/brief.md",
+            ".claude/commands/workflow.md",
             ".opencode/commands/brief.md",
             ".opencode/commands/workflow.md",
             ".codex/prompts/brief.md",
             ".codex/prompts/workflow.md",
+            "skills/",
+            ".claude/skills/",
+            ".opencode/skills/",
+            ".agents/skills/",
             ".workflow-pack/manifest.json",
         ],
         "installed_at": date.today().isoformat(),
@@ -236,7 +284,7 @@ def main():
     config = load_config(config_path)
     context = build_context(config)
 
-    for template_name, relative_target in TEMPLATE_FILES.items():
+    for relative_target, template_name in TEMPLATE_FILES.items():
         template_text = (template_dir / template_name).read_text(encoding="utf-8")
         target = repo / relative_target
         write_file(target, render(template_text, context), args.dry_run)
@@ -251,8 +299,9 @@ def main():
         source_skill = required_skills_dir / skill_name
         if not source_skill.exists():
             raise FileNotFoundError(f"Required skill bundle not found: {source_skill}")
-        target_skill = repo / config["local_skills_dir"] / skill_name
-        copy_required_skill(source_skill, target_skill, args.dry_run)
+        for relative_target in repo_skill_targets(config):
+            target_skill = repo / relative_target / skill_name
+            copy_required_skill(source_skill, target_skill, args.dry_run)
         copied_skills.add(skill_name)
 
     for skill_name in config["bundled_skills"]:
@@ -261,8 +310,9 @@ def main():
         source_skill = bundled_skills_dir / skill_name
         if not source_skill.exists():
             raise FileNotFoundError(f"Bundled skill bundle not found: {source_skill}")
-        target_skill = repo / config["local_skills_dir"] / skill_name
-        copy_required_skill(source_skill, target_skill, args.dry_run)
+        for relative_target in repo_skill_targets(config):
+            target_skill = repo / relative_target / skill_name
+            copy_required_skill(source_skill, target_skill, args.dry_run)
         copied_skills.add(skill_name)
 
     manifest_target = repo / ".workflow-pack" / "manifest.json"

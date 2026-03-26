@@ -8,14 +8,17 @@ A ready machine should have:
 - Python 3.12+
 - GitHub CLI (`gh`)
 - `specify-cli`
-- a global Codex skills directory at `$CODEX_HOME/skills` or `~/.codex/skills`
+- one or more agent-native global skill directories when you want global installation:
+  - Codex: `$CODEX_HOME/skills` or `~/.codex/skills`
+  - Claude Code: `~/.claude/skills`
+  - OpenCode: `~/.config/opencode/skills`
 - the bundled essential skills installed globally:
   - `specify-workflow-pack`
   - `brainstorming`
   - `gh-fix-ci`
   - `gh-address-comments`
 
-The starter also vendors curated repo-local fallback skills for the first ready profiles. See `docs/SKILLS.md`.
+The starter also vendors curated repo-local fallback skills and mirrors them into `.claude/skills/`, `.opencode/skills/`, and `.agents/skills/` for broader agent compatibility. See `docs/SKILLS.md`.
 
 Profile-specific tools are validated later by the doctor command once you choose a profile.
 
@@ -53,7 +56,7 @@ macOS / Linux:
 bash ./scripts/install-workflow-pack.sh
 ```
 
-Restart Codex after installing global skills so new sessions can see them.
+Restart the agent session you use after installing global skills so new sessions can see them.
 
 ## Run Doctor
 
