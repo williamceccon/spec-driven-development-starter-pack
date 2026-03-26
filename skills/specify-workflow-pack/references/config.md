@@ -67,7 +67,7 @@ Use `workflow-pack.json` at the repository root as the repo-local workflow contr
 ## Supported Keys
 
 - `project_name`: Required display name for generated workflow files
-- `pack_version`: Version of the public starter pack contract
+- `pack_version`: Version of the SPEC-DRIVEN DEVELOPMENT STARTER PACK contract
 - `core_version`: Version of the core workflow layer
 - `profile`: Selected project profile slug
 - `profile_version`: Version of the selected profile

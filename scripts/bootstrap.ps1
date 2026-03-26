@@ -2,7 +2,7 @@
 
 $ErrorActionPreference = 'Stop'
 
-Write-Host 'Checking Windows machine prerequisites for the public starter pack...'
+Write-Host 'Checking Windows machine prerequisites for the SPEC-DRIVEN DEVELOPMENT STARTER PACK...'
 
 $tools = @('git','python','gh','specify')
 foreach ($tool in $tools) {

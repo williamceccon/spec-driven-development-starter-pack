@@ -52,7 +52,7 @@ def env_warning(repo: Path) -> str | None:
 
 
 def main() -> None:
-    parser = argparse.ArgumentParser(description="Check whether the machine and generated repo are ready for the starter pack workflow")
+    parser = argparse.ArgumentParser(description="Check whether the machine and generated repo are ready for the SPEC-DRIVEN DEVELOPMENT STARTER PACK workflow")
     parser.add_argument("--profile", default="")
     parser.add_argument("--addons", default="")
     parser.add_argument("--repo", default=".")

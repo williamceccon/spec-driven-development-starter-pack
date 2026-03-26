@@ -1,47 +1,69 @@
-# Specify Workflow Starter
+# SPEC-DRIVEN DEVELOPMENT STARTER PACK
+### Launch spec-driven, multi-agent projects with safer defaults.
 
-A public starter platform for **spec-driven development**, **first-time vibe coding**, and **multi-agent project setup**.
+An open source starter platform for teams and solo builders who want a practical way to begin new projects with clear workflow contracts, guided onboarding, portable setup, and room to grow into smarter orchestration over time.
 
-This repo helps you create new repositories with:
+[![Release](https://img.shields.io/github/v/release/williamceccon/spec-driven-development-starter-pack?display_name=tag)](https://github.com/williamceccon/spec-driven-development-starter-pack/releases)
+[![License](https://img.shields.io/github/license/williamceccon/spec-driven-development-starter-pack)](LICENSE)
+[![Platforms](https://img.shields.io/badge/platforms-Windows%20%7C%20macOS%20%7C%20Linux-1f6feb)](#supported-platforms)
+[![Ready Profiles](https://img.shields.io/badge/ready%20profiles-5-success)](#profile-catalog)
 
-- a portable workflow contract
-- guided onboarding for new users
-- reusable project profiles
-- composable add-ons such as databases and orchestration bundles
-- generated docs, env files, prompts, and workflow governance
+---
 
-## Who This Is For
+## Table of Contents
 
-- developers trying spec-driven or agent-assisted development for the first time
-- teams that want consistent repo setup across Windows, macOS, and Linux
-- people who want a starter that explains GitHub, CI, env files, and first steps instead of assuming them
+- [What It Is](#what-it-is)
+- [Why This Pack Exists](#why-this-pack-exists)
+- [Get Started](#get-started)
+- [Beginner-Friendly Onboarding](#beginner-friendly-onboarding)
+- [Generated Flow](#generated-flow)
+- [Profile Catalog](#profile-catalog)
+- [Add-on Catalog](#add-on-catalog)
+- [Curated Skills](#curated-skills)
+- [Supported Platforms](#supported-platforms)
+- [Supported Workspaces and Agents](#supported-workspaces-and-agents)
+- [Repository Layout](#repository-layout)
+- [Roadmap](#roadmap)
+- [Documentation](#documentation)
+- [License](#license)
 
-## Supported Platforms
+## What It Is
 
-- Windows
-- macOS
-- Linux
+SPEC-DRIVEN DEVELOPMENT STARTER PACK helps you create new repositories with:
 
-## Supported Workspaces / Agents
+- a repo-first workflow contract
+- guided project generation with beginner-safe defaults
+- reusable profiles for common project shapes
+- composable add-ons for databases and orchestration bundles
+- generated docs, prompts, environment templates, and workflow governance
 
-- Codex
-- OpenCode
-- GitHub Copilot
-- Antigravity
-
-The repo contract is **repo-first**. Tool-specific prompts are generated, but the stable source of truth is:
+The stable source of truth in generated projects is:
 
 - `workflow-pack.json`
 - `.workflow-pack/manifest.json`
 - `AGENTS.md`
 
-## Quick Start
+Tool-specific prompts are generated from that contract instead of becoming the contract themselves.
 
-### 1. Clone the starter
+## Why This Pack Exists
+
+Many new projects fail at the boring but critical setup layer: inconsistent environments, unclear GitHub setup, missing CI, no shared workflow rules, and too much hidden knowledge about how the team expects agents to work.
+
+This starter pack is designed to reduce that friction by giving every new project:
+
+- a portable core workflow layer
+- a selected project profile
+- optional add-ons for common capabilities
+- curated repo-local fallback skills
+- beginner-friendly instructions for environment, CI, dependencies, and first steps
+
+## Get Started
+
+### 1. Clone the repository
 
 ```bash
-git clone <your-fork-or-this-repo-url>
-cd specify-workflow-starter
+git clone https://github.com/williamceccon/spec-driven-development-starter-pack.git
+cd spec-driven-development-starter-pack
 ```
 
 ### 2. Bootstrap your machine
@@ -62,7 +84,7 @@ bash ./scripts/install-workflow-pack.sh
 bash ./scripts/doctor.sh
 ```
 
-### 3. Create a project
+### 3. Generate a new project
 
 Interactive:
 
@@ -84,27 +106,42 @@ Non-interactive:
 bash ./scripts/new-project.sh --name demo-api --target-path "$HOME/projects" --profile python-api --addons postgres,core-workflow
 ```
 
-### 4. Start the first feature
+### 4. Follow the generated README
 
-Inside the generated repo:
+Inside the generated repository:
 
 1. Read `README.md`
 2. Copy `.env.example` to `.env`
-3. Run the install and validation commands from the generated README
-4. Start with `/brief "initial feature idea"`
-5. Run `/workflow <slug>` only after `BRIEF.md` is approved
+3. Install dependencies using the generated commands
+4. Run the first validation command
+5. Start your workflow with `/brief "initial feature idea"`
+
+## Beginner-Friendly Onboarding
+
+This pack is intentionally built for people using spec-driven development or agent-assisted development for the first time.
+
+Generated projects include:
+
+- a profile-specific `README.md`
+- `.env.example`
+- install, run, and validation commands
+- a first-30-minutes checklist
+- GitHub repository creation and push instructions
+- optional GitHub Actions CI setup
+
+If you are new to GitHub, env files, or dependency installation, the generated docs are designed to explain the basics instead of assuming them.
 
 ## Generated Flow
 
 ```mermaid
 flowchart LR
-    A["Clone starter"] --> B["Bootstrap machine"]
-    B --> C["Run doctor"]
-    C --> D["Choose profile + add-ons"]
-    D --> E["Generate repo"]
-    E --> F["Read generated README + manifest"]
+    A["Clone the starter"] --> B["Bootstrap local machine"]
+    B --> C["Run doctor checks"]
+    C --> D["Choose profile and add-ons"]
+    D --> E["Generate project"]
+    E --> F["Read generated README and manifest"]
     F --> G["Install dependencies"]
-    G --> H["Run first validation"]
+    G --> H["Run validation"]
     H --> I["Start with /brief"]
 ```
 
@@ -112,15 +149,15 @@ flowchart LR
 
 ### Ready now
 
-| Profile | Family | Status | Notes |
+| Profile | Family | Status | Best for |
 | --- | --- | --- | --- |
-| `python-library` | packages | ready | Reusable Python packages and libraries |
-| `python-api` | apps | ready | Beginner-friendly backend/API starter |
-| `nextjs-webapp` | apps | ready | Frontend-first web application starter |
-| `fullstack-web` | apps | ready | Backend + frontend workflow shape |
-| `automation-agent` | specialized | ready | Scripts, prompts, workflows, and automation repos |
+| `python-library` | packages | ready | Python packages, SDKs, and reusable modules |
+| `python-api` | apps | ready | Beginner-friendly Python API services |
+| `nextjs-webapp` | apps | ready | Frontend-first web applications |
+| `fullstack-web` | apps | ready | Web projects with backend and frontend coordination |
+| `automation-agent` | specialized | ready | Automation, prompts, workflows, and agent-heavy repos |
 
-### Planned
+### Planned roadmap
 
 | Profile | Family | Status |
 | --- | --- | --- |
@@ -129,6 +166,8 @@ flowchart LR
 | `cli-tool` | packages | planned |
 | `data-science` | specialized | planned |
 | `ml-service` | specialized | planned |
+
+Each profile is responsible for starter structure, dependency commands, validation defaults, CI shape, env conventions, recommended skills, and GitHub notes.
 
 ## Add-on Catalog
 
@@ -150,53 +189,75 @@ flowchart LR
 Add-ons can contribute:
 
 - `.env.example` entries
+- local setup guidance
 - validation notes
 - GitHub Actions services
-- recommended skills
-- beginner documentation notes
+- migration or healthcheck conventions
+- recommended or bundled skills
 
-## Recommended Orchestration Skills
+## Curated Skills
 
-These are optional. The base starter should still feel approachable without them.
+The repository vendors a curated fallback set under `skills/` so generated projects do not depend entirely on machine-global state.
+
+Bundled for the first ready profiles:
+
+- core workflow: `brainstorming`, `writing-plans`, `verification-before-completion`
+- GitHub maintenance: `gh-fix-ci`, `gh-address-comments`
+- quality and debugging: `systematic-debugging`, `test-driven-development`, `requesting-code-review`
+- web support: `playwright` for web-oriented profiles
+- extension path: `skill-creator` so teams can create local project skills over time
+
+Recommended orchestration bundles:
 
 - `core-workflow`: `brainstorming`, `writing-plans`, `verification-before-completion`
 - `delivery`: `subagent-driven-development`, `dispatching-parallel-agents`
 - `quality`: `requesting-code-review`, `systematic-debugging`, `test-driven-development`
 - `maintenance`: `gh-fix-ci`, `gh-address-comments`
 
-## Curated Repo-Local Skills
+See [`docs/SKILLS.md`](docs/SKILLS.md) for the current skill matrix by profile.
 
-The starter now vendors a curated fallback set under `skills/` for the first ready profiles instead of relying only on global machine state.
+## Supported Platforms
 
-- core fallback: `brainstorming`, `gh-fix-ci`, `gh-address-comments`
-- implementation quality: `writing-plans`, `verification-before-completion`, `systematic-debugging`, `test-driven-development`, `requesting-code-review`
-- frontend support: `playwright` for the web-oriented profiles
-- extension path: `skill-creator` so users can create their own project skills locally
+- Windows
+- macOS
+- Linux
 
-## New To GitHub?
+## Supported Workspaces and Agents
 
-The generated README includes a section called **Create a GitHub repository and push**.
+- Codex
+- OpenCode
+- GitHub Copilot
+- Antigravity
 
-At a high level:
+The project contract stays repo-centric so these surfaces can coexist without making the repository dependent on a single agent implementation.
 
-1. create an empty GitHub repo
-2. initialize git if needed
-3. commit the generated files
-4. add the remote
-5. push `main`
-6. wait for the first CI run
-
-## Repo Layout
+## Repository Layout
 
 - [`core`](core)
 - [`profiles`](profiles)
 - [`addons`](addons)
 - [`scripts`](scripts)
-- [`skills/specify-workflow-pack`](skills/specify-workflow-pack)
+- [`skills`](skills)
+- [`docs`](docs)
 
-## Next Reading
+## Roadmap
+
+Near-term priorities:
+
+- deepen the ready profile implementations
+- improve the guided `new-project` experience
+- add more smoke coverage for profile and add-on combinations
+- introduce a future-safe sync or upgrade path for generated repositories
+- publish more polished releases, examples, and walkthroughs
+
+## Documentation
 
 - [`docs/SETUP.md`](docs/SETUP.md)
 - [`docs/PROJECT_BOOTSTRAP.md`](docs/PROJECT_BOOTSTRAP.md)
 - [`docs/SKILLS.md`](docs/SKILLS.md)
+- [`skills/specify-workflow-pack/references/config.md`](skills/specify-workflow-pack/references/config.md)
 - [`CHANGELOG.md`](CHANGELOG.md)
+
+## License
+
+[MIT](LICENSE)

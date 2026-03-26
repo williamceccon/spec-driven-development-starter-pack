@@ -1,7 +1,7 @@
 ﻿#!/usr/bin/env bash
 set -euo pipefail
 
-echo "Checking macOS/Linux machine prerequisites for the public starter pack..."
+echo "Checking macOS/Linux machine prerequisites for the SPEC-DRIVEN DEVELOPMENT STARTER PACK..."
 for tool in git python3 gh specify; do
   if command -v "$tool" >/dev/null 2>&1; then
     echo "Found $tool"

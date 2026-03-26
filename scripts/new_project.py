@@ -41,7 +41,7 @@ def choose_addons(starter_root: Path) -> list[str]:
 
 
 def main() -> None:
-    parser = argparse.ArgumentParser(description="Generate a new project from the public starter pack")
+    parser = argparse.ArgumentParser(description="Generate a new project from the SPEC-DRIVEN DEVELOPMENT STARTER PACK")
     parser.add_argument("--name")
     parser.add_argument("--target-path")
     parser.add_argument("--profile")
