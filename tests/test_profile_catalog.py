@@ -1,4 +1,5 @@
 import importlib.util
+import json
 import unittest
 from pathlib import Path
 
@@ -22,6 +23,42 @@ class ProfileCatalogTests(unittest.TestCase):
 
         self.assertEqual(len(ready_profiles), 5)
         self.assertEqual(len(all_profiles), 10)
+
+    def test_all_profile_and_addon_skill_references_are_vendored(self):
+        starter_root = Path(__file__).resolve().parents[1]
+        required_skills = {
+            path.name
+            for path in (starter_root / "skills" / "specify-workflow-pack" / "assets" / "required-skills").iterdir()
+            if path.is_dir()
+        }
+        bundled_skills = {
+            path.name
+            for path in (starter_root / "skills" / "specify-workflow-pack" / "assets" / "bundled-skills").iterdir()
+            if path.is_dir()
+        }
+        available_skills = required_skills | bundled_skills
+        missing = []
+
+        def collect_skill_references(config_path: Path):
+            data = json.loads(config_path.read_text(encoding="utf-8"))
+            for field in ("required_skills", "bundled_skills"):
+                for skill in data.get(field, []):
+                    if skill not in available_skills:
+                        missing.append(f"{config_path.relative_to(starter_root)} -> {field}: {skill}")
+            for bundle, skills in data.get("recommended_skills", {}).items():
+                for skill in skills:
+                    if skill not in available_skills:
+                        missing.append(
+                            f"{config_path.relative_to(starter_root)} -> recommended_skills.{bundle}: {skill}"
+                        )
+
+        for config_path in (starter_root / "profiles").glob("*/profile.json"):
+            collect_skill_references(config_path)
+
+        for config_path in (starter_root / "addons").glob("*/*/addon.json"):
+            collect_skill_references(config_path)
+
+        self.assertEqual(missing, [])
 
 
 if __name__ == "__main__":

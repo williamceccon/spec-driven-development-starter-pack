@@ -3,8 +3,9 @@
 $ErrorActionPreference = 'Stop'
 $repoRoot = Split-Path $PSScriptRoot -Parent
 $skillsSource = Join-Path $repoRoot 'skills'
+$codexHome = if ($env:CODEX_HOME) { $env:CODEX_HOME } else { Join-Path $HOME '.codex' }
 $targets = @(
-  @{ Name = 'Codex'; Path = (Join-Path (if ($env:CODEX_HOME) { $env:CODEX_HOME } else { Join-Path $HOME '.codex' }) 'skills') },
+  @{ Name = 'Codex'; Path = (Join-Path $codexHome 'skills') },
   @{ Name = 'Claude Code'; Path = (Join-Path $HOME '.claude\skills') },
   @{ Name = 'OpenCode'; Path = (Join-Path $HOME '.config\opencode\skills') },
   @{ Name = 'Generic Agents'; Path = (Join-Path $HOME '.agents\skills') }

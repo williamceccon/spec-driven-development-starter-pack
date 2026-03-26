@@ -363,7 +363,7 @@ def install_workflow_pack(starter_root: Path, target_path: Path) -> None:
 
     copied_skills = set()
     for skill_name in config["required_skills"]:
-        source_skill = required_skills_dir / skill_name
+        source_skill = module.resolve_skill_source(skill_name, required_skills_dir, bundled_skills_dir)
         for relative_target in module.repo_skill_targets(config):
             target_skill = target_path / relative_target / skill_name
             module.copy_required_skill(source_skill, target_skill, dry_run=False)
@@ -372,7 +372,7 @@ def install_workflow_pack(starter_root: Path, target_path: Path) -> None:
     for skill_name in config.get("bundled_skills", []):
         if skill_name in copied_skills:
             continue
-        source_skill = bundled_skills_dir / skill_name
+        source_skill = module.resolve_skill_source(skill_name, required_skills_dir, bundled_skills_dir)
         for relative_target in module.repo_skill_targets(config):
             target_skill = target_path / relative_target / skill_name
             module.copy_required_skill(source_skill, target_skill, dry_run=False)

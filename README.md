@@ -23,6 +23,7 @@ SPEC-DRIVEN DEVELOPMENT STARTER PACK is based on the methodology introduced in G
 
 - [:toolbox: What It Is](#what-it-is)
 - [:bulb: Why This Pack Exists](#why-this-pack-exists)
+- [:triangular_ruler: Proposed Architecture](#proposed-architecture)
 - [:rocket: Get Started](#get-started)
 - [:seedling: Beginner-Friendly Onboarding](#beginner-friendly-onboarding)
 - [:twisted_rightwards_arrows: Generated Flow](#generated-flow)
@@ -69,6 +70,46 @@ This starter pack is designed to reduce that friction by giving every new projec
 - optional add-ons for common capabilities
 - curated repo-local fallback skills
 - beginner-friendly instructions for environment, CI, dependencies, and first steps
+
+The goal is not only to help you generate code faster. The goal is to help you start a repository that can still be understood, maintained, and evolved after the first burst of AI-assisted momentum.
+
+## :triangular_ruler: Proposed Architecture
+
+The pack uses a layered architecture so that project shape, optional capabilities, and agent surfaces can evolve without turning the repository into prompt sprawl.
+
+### :building_construction: Architecture tiers
+
+| Tier | Owns | Why it exists | Limit |
+| --- | --- | --- | --- |
+| `workflow contract` | `workflow-pack.json`, `.workflow-pack/manifest.json`, governance docs | Keeps the repo, not the tool, as the source of truth | Can become too generic if a large org needs many incompatible workflows |
+| `profile` | project shape, default commands, validation, CI shape, env conventions | Gives each new repo a clear starter identity | Assumes one dominant project style per generated repo |
+| `add-on` | optional capabilities such as database contracts or orchestration bundles | Lets you compose common concerns without duplicating whole profiles | Works best for additive concerns, not deep architectural rewrites |
+| `workspace surface` | Codex, Claude Code, OpenCode, GitHub Copilot, Antigravity outputs | Mirrors the same repo contract across multiple agent systems | Vendor-specific features can drift faster than the shared repo contract |
+
+### :compass: Why this architecture
+
+- The repository remains the stable center, even if your preferred AI workspace changes.
+- Profiles solve the "blank repo" problem by giving each project a concrete shape from day one.
+- Add-ons keep optional concerns modular, so you do not need a separate profile for every combination.
+- Generated agent surfaces reduce repeated setup work while keeping prompts synchronized with the same project contract.
+
+### :warning: Tier limits and scaling difficulties
+
+This architecture is intentionally strong for `single repos`, `small teams`, `solo builders`, and `medium-complexity products`. It starts to feel more constrained when:
+
+- a repo becomes a large monorepo with multiple teams and conflicting workflow needs
+- one generated repo needs to support several equally important product shapes at once
+- add-ons begin to depend on each other in non-additive ways
+- agent vendors diverge enough that one shared contract no longer fits all of them cleanly
+
+In practice, the likely scaling pain points are:
+
+- `contract pressure`: one `workflow-pack.json` can become too broad if the repo represents many sub-products
+- `profile pressure`: a profile can stop being expressive enough once the stack becomes highly specialized
+- `add-on pressure`: combinations are easy when concerns are simple, but harder when infra choices interact deeply
+- `surface pressure`: generated prompts stay aligned only if the repo contract stays disciplined
+
+For that reason, this pack is best seen as a strong bootstrap architecture, not a promise that every large-scale evolution can remain fully declarative forever.
 
 ## :rocket: Get Started
 
@@ -160,44 +201,57 @@ flowchart LR
 
 ## :open_file_folder: Profile Catalog
 
+Profiles define the base identity of a generated repository. A profile chooses the default project shape, starter files, install commands, validation defaults, env conventions, skill bundle, and CI direction.
+
+### :gear: How profiles work
+
+Each profile answers the question: "What kind of repo am I generating?"
+
+Profiles are responsible for:
+
+- starter structure and template files
+- install, run, and test commands shown in the generated README
+- baseline workflow and skill bundles
+- validation defaults and CI starter shape
+- env conventions and GitHub notes
+
+Profiles are not meant to encode every future decision in the life of the project. They give you a coherent starting point, then the repository can evolve as its needs become more specific.
+
 ### :white_check_mark: Ready now
 
-| Profile | Family | Status | Best for |
-| --- | --- | --- | --- |
-| `python-library` | packages | ready | Python packages, SDKs, and reusable modules |
-| `python-api` | apps | ready | Beginner-friendly Python API services |
-| `nextjs-webapp` | apps | ready | Frontend-first web applications |
-| `fullstack-web` | apps | ready | Web projects with backend and frontend coordination |
-| `automation-agent` | specialized | ready | Automation, prompts, workflows, and agent-heavy repos |
+| Profile | Best for | How it works | Why use it | Tier limit and likely difficulty |
+| --- | --- | --- | --- | --- |
+| `python-library` | Python packages, SDKs, reusable modules | Starts with a package-oriented repo shape and lightweight validation defaults | Good when the main product is a reusable artifact rather than a running service | Packaging complexity grows quickly once you need multi-version support, publishing automation, or many optional extras |
+| `python-api` | Beginner-friendly backend services | Starts with a simple Python service structure, tests, env file, and CI-ready defaults | Good first choice for APIs, internal services, and MVP backends | As async infra, auth, observability, and deployment complexity grow, the generic starter becomes less expressive |
+| `nextjs-webapp` | Frontend-first web apps | Starts with a web-oriented workflow bundle and browser-friendly validation expectations | Useful when the UI is the center of the product and backend concerns are secondary | If the project grows a strong backend or separate services, the frontend-first profile can feel too narrow |
+| `fullstack-web` | Coordinated backend plus frontend work | Starts with a repo shape meant for shared governance across product layers | Good when one repo needs both application surfaces from the beginning | Larger teams may outgrow a single fullstack starter and split into services, packages, or a monorepo strategy |
+| `automation-agent` | Agent-heavy repos, scripts, workflows, prompt-driven automation | Starts with governance and skill defaults optimized for automation and orchestration work | Useful when the repo itself is mostly workflows, prompts, or automation logic | These repos can sprawl fast if conventions for boundaries, ownership, and testing are not kept strict |
 
 ### :compass: Planned roadmap
 
-| Profile | Family | Status |
+| Profile | Intended use | Likely reason to add it later |
 | --- | --- | --- |
-| `node-api` | apps | planned |
-| `typescript-library` | packages | planned |
-| `cli-tool` | packages | planned |
-| `data-science` | specialized | planned |
-| `ml-service` | specialized | planned |
+| `node-api` | Node.js backend services | Better runtime assumptions for JavaScript-first service teams |
+| `typescript-library` | Shared TS packages and SDKs | Better package ergonomics for frontend and platform repos |
+| `cli-tool` | Command-line apps and automation utilities | Better UX around binaries, flags, and packaging |
+| `data-science` | Notebooks, experiments, reporting workflows | Better fit for exploratory work than app-oriented profiles |
+| `ml-service` | Model-serving or evaluation-focused systems | Better fit for inference, evaluation, and model lifecycle concerns |
 
-Each profile is responsible for starter structure, dependency commands, validation defaults, CI shape, env conventions, recommended skills, and GitHub notes.
+### :warning: Profile scaling notes
+
+Profiles are most effective when one project shape is clearly dominant. They become harder to reason about when:
+
+- one repo needs to be both package, service, UI, and automation platform at the same time
+- the team starts adding many profile-specific exceptions after generation
+- the generated commands no longer reflect how the real project is actually built and tested
+
+That is the main profile-tier limit: profiles make starts safer, but over-specializing a single profile can eventually become harder than evolving the repo directly.
 
 ## :jigsaw: Add-on Catalog
 
-### :card_file_box: Database add-ons
+Add-ons define optional capabilities layered on top of a profile. They are meant to stay composable and additive: a base profile gives the project shape, and add-ons attach common concerns without forcing an entirely different starter.
 
-- `sqlite`
-- `postgres`
-- `mysql`
-- `mongodb`
-- `redis`
-
-### :robot: Orchestration bundles
-
-- `core-workflow`
-- `delivery`
-- `quality`
-- `maintenance`
+### :link: How add-ons work
 
 Add-ons can contribute:
 
@@ -207,6 +261,37 @@ Add-ons can contribute:
 - GitHub Actions services
 - migration or healthcheck conventions
 - recommended or bundled skills
+
+They are best for optional concerns that can be attached cleanly to many project shapes. They are not ideal when a capability fundamentally changes the structure of the project.
+
+### :card_file_box: Database add-ons
+
+| Add-on | What it adds | Good for | Practical limit and likely difficulty |
+| --- | --- | --- | --- |
+| `sqlite` | Local file-backed database contract and env defaults | prototypes, local-first tooling, single-node workflows | Concurrency, multi-writer behavior, and production realism become the main limits |
+| `postgres` | Relational DB contract plus CI service support | production-like relational development, stronger local realism | Migrations, schema ownership, and operational discipline are still left to the generated repo to define |
+| `mysql` | MySQL-compatible relational contract | teams or platforms already aligned with MySQL ecosystems | Same relational scaling concerns as Postgres, with its own operational and compatibility conventions |
+| `mongodb` | Document-store connection contract | document-heavy products and flexible schema exploration | Schema drift, indexing strategy, and query discipline become harder as the product matures |
+| `redis` | Cache or queue connection contract | caching, ephemeral data, queue-like support | Redis is not a substitute for durable system-of-record design, so misuse becomes the scaling risk |
+
+### :robot: Orchestration bundles
+
+| Add-on | What it adds | Good for | Practical limit and likely difficulty |
+| --- | --- | --- | --- |
+| `core-workflow` | stronger planning and verification discipline | teams that want a safer spec-first default without much complexity | Adds process overhead, so lightweight experiments may feel slower if the team does not actually use the workflow |
+| `delivery` | multi-agent and parallel-delivery skills | teams exploring parallel implementation or agent delegation | Coordination, merge conflicts, and task partitioning become harder before the code does |
+| `quality` | debugging, TDD, and review-oriented skills | projects where correctness and maintainability matter early | Stronger quality gates improve safety but can feel heavier for throwaway prototypes |
+| `maintenance` | CI recovery and follow-up workflow support | active repos where GitHub review and CI noise are already part of the routine | Useful only if the team is prepared to operationalize it instead of treating it as decorative tooling |
+
+### :warning: Add-on scaling notes
+
+Add-ons work well when concerns are additive. They become harder when:
+
+- two add-ons imply conflicting operational models
+- a repo needs cross-cutting infra conventions that are deeper than env vars and starter notes
+- teams expect add-ons to automatically solve production architecture, not just scaffold it
+
+That is the main add-on-tier limit: composition is powerful while concerns stay modular, but complexity rises when combinations need deeper integration logic than the starter pack currently encodes.
 
 ## :books: Curated Skills
 
@@ -219,6 +304,7 @@ Bundled for the first ready profiles:
 - quality and debugging: `systematic-debugging`, `test-driven-development`, `requesting-code-review`
 - web support: `playwright` for web-oriented profiles
 - extension path: `skill-creator` so teams can create local project skills over time
+- multi-agent delivery: `subagent-driven-development`, `dispatching-parallel-agents` through the `delivery` add-on
 
 Recommended orchestration bundles:
 

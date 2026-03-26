@@ -200,6 +200,20 @@ def copy_required_skill(skill_dir: Path, target_dir: Path, dry_run: bool):
     print(f"Copied required skill {skill_dir.name} to {target_dir}")
 
 
+def resolve_skill_source(skill_name: str, required_skills_dir: Path, bundled_skills_dir: Path) -> Path:
+    required_path = required_skills_dir / skill_name
+    if required_path.exists():
+        return required_path
+
+    bundled_path = bundled_skills_dir / skill_name
+    if bundled_path.exists():
+        return bundled_path
+
+    raise FileNotFoundError(
+        f"Skill bundle not found in required or bundled assets: {skill_name}"
+    )
+
+
 def repo_skill_targets(config: dict) -> list[str]:
     targets = [config["local_skills_dir"]]
     for mirror in REPO_SKILL_MIRRORS:
@@ -296,9 +310,7 @@ def main():
 
     copied_skills = set()
     for skill_name in config["required_skills"]:
-        source_skill = required_skills_dir / skill_name
-        if not source_skill.exists():
-            raise FileNotFoundError(f"Required skill bundle not found: {source_skill}")
+        source_skill = resolve_skill_source(skill_name, required_skills_dir, bundled_skills_dir)
         for relative_target in repo_skill_targets(config):
             target_skill = repo / relative_target / skill_name
             copy_required_skill(source_skill, target_skill, args.dry_run)
@@ -307,9 +319,7 @@ def main():
     for skill_name in config["bundled_skills"]:
         if skill_name in copied_skills:
             continue
-        source_skill = bundled_skills_dir / skill_name
-        if not source_skill.exists():
-            raise FileNotFoundError(f"Bundled skill bundle not found: {source_skill}")
+        source_skill = resolve_skill_source(skill_name, required_skills_dir, bundled_skills_dir)
         for relative_target in repo_skill_targets(config):
             target_skill = repo / relative_target / skill_name
             copy_required_skill(source_skill, target_skill, args.dry_run)

@@ -1,5 +1,7 @@
 import importlib.util
 import json
+import os
+import subprocess
 import tempfile
 import unittest
 from pathlib import Path
@@ -83,6 +85,32 @@ class InstallWorkflowPackTests(unittest.TestCase):
         self.assertIn(".workflow-pack/manifest.json", manifest["generated_surfaces"])
         self.assertEqual(manifest["recommended_skills"]["core-workflow"], ["writing-plans"])
         self.assertIn("Claude Code", manifest["supported_workspaces"])
+
+    def test_powershell_installer_runs_with_default_codex_home_resolution(self):
+        repo_root = Path(__file__).resolve().parents[1]
+        script_path = repo_root / "scripts" / "install-workflow-pack.ps1"
+
+        with tempfile.TemporaryDirectory() as home_dir:
+            env = os.environ.copy()
+            env["HOME"] = home_dir
+            env["USERPROFILE"] = home_dir
+            env.pop("CODEX_HOME", None)
+            result = subprocess.run(
+                [
+                    "powershell",
+                    "-NoProfile",
+                    "-ExecutionPolicy",
+                    "Bypass",
+                    "-File",
+                    str(script_path),
+                ],
+                cwd=repo_root,
+                env=env,
+                capture_output=True,
+                text=True,
+            )
+
+        self.assertEqual(result.returncode, 0, result.stderr)
 
 
 if __name__ == "__main__":

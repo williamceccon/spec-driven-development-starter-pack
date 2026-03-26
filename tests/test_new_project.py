@@ -94,6 +94,65 @@ class NewProjectGenerationTests(unittest.TestCase):
         self.assertIn("playwright", workflow_config["bundled_skills"])
         self.assertTrue(playwright_exists)
 
+    def test_all_ready_profiles_generate_successfully(self):
+        module = load_module()
+        starter_root = Path(__file__).resolve().parents[1]
+        ready_profiles = module.list_profiles(starter_root)
+
+        with tempfile.TemporaryDirectory() as tmpdir:
+            target_root = Path(tmpdir)
+            for profile in ready_profiles:
+                project_path = module.create_project(
+                    starter_root=starter_root,
+                    project_name=f"demo-{profile['slug']}",
+                    target_root=target_root,
+                    profile_name=profile["slug"],
+                    initialize_git=False,
+                )
+                self.assertTrue((project_path / "workflow-pack.json").exists(), profile["slug"])
+                self.assertTrue((project_path / ".workflow-pack" / "manifest.json").exists(), profile["slug"])
+
+    def test_delivery_addon_vendors_multi_agent_skills(self):
+        module = load_module()
+        starter_root = Path(__file__).resolve().parents[1]
+
+        with tempfile.TemporaryDirectory() as tmpdir:
+            project_path = module.create_project(
+                starter_root=starter_root,
+                project_name="demo-delivery",
+                target_root=Path(tmpdir),
+                profile_name="fullstack-web",
+                addon_names=["delivery"],
+                initialize_git=False,
+            )
+            workflow_config = json.loads((project_path / "workflow-pack.json").read_text(encoding="utf-8"))
+            subagent_skill_exists = (project_path / "skills" / "subagent-driven-development" / "SKILL.md").exists()
+            dispatch_skill_exists = (project_path / "skills" / "dispatching-parallel-agents" / "SKILL.md").exists()
+
+        self.assertIn("subagent-driven-development", workflow_config["bundled_skills"])
+        self.assertIn("dispatching-parallel-agents", workflow_config["bundled_skills"])
+        self.assertTrue(subagent_skill_exists)
+        self.assertTrue(dispatch_skill_exists)
+
+    def test_every_addon_can_be_applied_to_a_ready_profile(self):
+        module = load_module()
+        starter_root = Path(__file__).resolve().parents[1]
+        addon_names = [addon["slug"] for addon in module.list_addons(starter_root)]
+
+        with tempfile.TemporaryDirectory() as tmpdir:
+            target_root = Path(tmpdir)
+            for addon_name in addon_names:
+                project_path = module.create_project(
+                    starter_root=starter_root,
+                    project_name=f"demo-{addon_name}",
+                    target_root=target_root,
+                    profile_name="python-api",
+                    addon_names=[addon_name],
+                    initialize_git=False,
+                )
+                self.assertTrue((project_path / "workflow-pack.json").exists(), addon_name)
+                self.assertTrue((project_path / ".workflow-pack" / "manifest.json").exists(), addon_name)
+
 
 if __name__ == "__main__":
     unittest.main()
